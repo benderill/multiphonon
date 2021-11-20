@@ -10,7 +10,7 @@ import description
 import input_peros
 import physical_constants
 import input_data
-import biasVoltage
+import bias_voltage
 import taysim
 import mesh
 import coulomb_factor
@@ -25,7 +25,7 @@ def main(data, obj, output):
     physical_constants.physical_constants(data)
     input_data.input_parameters(data, obj)
     input_data.derived_parameters(data)
-    biasVoltage.biasVoltage(data)
+    bias_voltage.biasVoltage(data)
     mesh.energy_grids(data)
     mesh.matrices(data)
 
