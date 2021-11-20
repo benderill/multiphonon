@@ -49,9 +49,3 @@ def w_function_2(data, arg, axis):
         wf2.denominator  # weighted function
     return(wf2.weighted_func)
 
-
-if __name__ == "__main__":
-    data = h5.H5()
-    data.filename = "C:/Users/basit/Simulations_and_results/Data/Paper1/SRH_deep_defects/Peros_Case_3.h5"
-    with open('output.txt', 'w+') as output:
-        main(data, input_peros, output)

@@ -53,8 +53,3 @@ def derived_parameters(data):
                    phycon.eVJ / (phycon.kB * inputs.T))
 
 
-if __name__ == "__main__":
-    data = h5.H5()
-    data.filename = "C:/Users/basit/Simulations_and_results/Data/Paper1/SRH_deep_defects/Peros_Case_3.h5"
-    with open('output.txt', 'w+') as output:
-        main(data, input_peros, output)

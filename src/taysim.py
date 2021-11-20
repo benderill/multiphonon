@@ -188,9 +188,3 @@ def eta_R_normalized(data):
     eta_nr.eta_R_max = numpy.amax(ocp.eta_R, axis=1)
     eta_nr.eta_R_norm = (ocp.eta_R.T / eta_nr.eta_R_max).T
 
-
-if __name__ == "__main__":
-    data = h5.H5()
-    data.filename = "C:/Users/basit/Simulations_and_results/Data/Paper1/SRH_deep_defects/Peros_knkp=1.h5"
-    with open('output.txt', 'w+') as output:
-        main(data, input_peros, output)
