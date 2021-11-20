@@ -133,3 +133,4 @@ dmypy.json
 *.pyproj
 *.sln 
 *.ipynb
+.DS_Store
