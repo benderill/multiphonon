@@ -1,7 +1,7 @@
 from scipy.special import cbrt
 from scipy.special import gamma
 import matplotlib.pyplot as plt
-from multipcc import h5 , description  , physical_constants , input_data , bias_voltage , taysim , mesh , coulomb_factor , weighing_function , radiative_capture , multiphonon , plot_data
+from multipcc import h5_wrapper , description  , physical_constants , input_data , bias_voltage , taysim , mesh , coulomb_factor , weighing_function , radiative_capture , multiphonon , plot_data
 
 # Warning: input_peros is an example it is nolonger imported as a module, check the main clause for import 
 
@@ -57,7 +57,7 @@ if __name__ == "__main__":
     with open('MAPI.json', 'r') as json_file:
         input_peros= json.load(json_file)
     input_peros = Dict(input_peros)
-    data = h5.H5()
+    data = h5_wrapper.H5()
     data.filename = "Peros_knkp=1.h5"
     with open('output.txt', 'w+') as output:
         main(data, input_peros, output)

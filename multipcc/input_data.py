@@ -6,12 +6,12 @@ def input_parameters(data, obj):
     phycon = data.root.physical_constants
     inputs = data.root.inputs
 
-    inputs.mat = obj.mat  # Material
-    inputs.T = obj.T  # Temperature in K
+    inputs.mat = obj.mat  # Material Name (string)
+    inputs.T = obj.T  # Temperature in kelvin (float)
     # inputs.a_0 = obj.a_0 * cbrt(1/4) * 1E-10           #(1/4)^(1/3) of lattice constant in meters ( for face centered unit cell)
-    inputs.a_0 = obj.a_0 * 1E-10  # for cubic unit cell
-    inputs.Eg = obj.Eg  # bandgap in eV
-    inputs.Ec = obj.Eg
+    inputs.a_0 = obj.a_0 * 1E-10  # lattice constant for cubic unit cell in meters (float)
+    inputs.Eg = obj.Eg  # bandgap in eV (float)
+    inputs.Ec = obj.Eg 
     inputs.Ev = 0
     # relative permittivity at low frequency in F/m
     inputs.epsilon_l = obj.epsilon_l * phycon.eps_0

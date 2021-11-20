@@ -1,4 +1,4 @@
-from multipcc import h5
+from multipcc import h5_wrapper
 import matplotlib.pyplot as plt
 import numpy
 
@@ -459,7 +459,7 @@ def plot_rate_SRH(data):
 
 
 if __name__ == "__main__":
-    data = h5.H5()
+    data = h5_wrapper.H5()
     data.filename = "C:/Users/basit/Simulations_and_results/Data/Paper1/SRH_deep_defects/Peros_Case_3.h5"
     data.load()
     twinx_mp(data)
