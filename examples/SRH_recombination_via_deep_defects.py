@@ -4,21 +4,9 @@ import scipy.constants
 from scipy.special import cbrt
 from scipy.special import gamma
 import matplotlib.pyplot as plt
-import h5
+from multipcc import h5 , description  , physical_constants , input_data , bias_voltage , taysim , mesh , coulomb_factor , weighing_function , radiative_capture , multiphonon , plot_data
 
-import description
-import input_peros
-import physical_constants
-import input_data
-import bias_voltage
-import taysim
-import mesh
-import coulomb_factor
-import weighing_function
-import radiative_capture
-import multiphonon
-import plot_data
-
+# Warning: input_peros is an example it is nolonger imported as a module, check the main clause for import 
 
 def main(data, obj, output):
     description.desciption(data)
@@ -67,7 +55,12 @@ def main(data, obj, output):
 
 
 if __name__ == "__main__":
+    import json
+    from addict import Dict
+    with open('MAPI.json', 'r') as json_file:
+        input_peros= json.load(json_file)
+    input_peros = Dict(input_peros)
     data = h5.H5()
-    data.filename = "C:/Users/basit/Simulations_and_results/Data/Paper1/SRH_deep_defects/Peros_knkp=1.h5"
+    data.filename = "Peros_knkp=1.h5"
     with open('output.txt', 'w+') as output:
         main(data, input_peros, output)
