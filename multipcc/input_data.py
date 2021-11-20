@@ -1,4 +1,3 @@
-import numpy
 import scipy.constants
 from scipy.special import cbrt
 

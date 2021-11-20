@@ -1,7 +1,3 @@
-import numpy
-import scipy
-
-
 def desciption(data):
     description = data.root.description
 

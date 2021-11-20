@@ -3,7 +3,6 @@ import scipy.constants
 import math
 import scipy.integrate
 from scipy.special import cbrt
-import matplotlib.pyplot as plt
 
 
 def integrand(x, a, b, c):  # integration I(a,b,c)

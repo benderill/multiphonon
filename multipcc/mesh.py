@@ -1,5 +1,4 @@
 import numpy
-import math
 import scipy.constants
 
 

@@ -1,6 +1,4 @@
 import numpy
-from scipy.special import cbrt
-
 
 def bias_voltage(data):
     inputs = data.root.inputs

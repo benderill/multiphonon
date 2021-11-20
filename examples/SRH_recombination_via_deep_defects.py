@@ -1,6 +1,3 @@
-import numpy
-import math
-import scipy.constants
 from scipy.special import cbrt
 from scipy.special import gamma
 import matplotlib.pyplot as plt
