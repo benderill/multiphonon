@@ -32,9 +32,7 @@ def occupation_probability(data):
     VB = data.root.bias_voltage
     ocp = data.root.occupation_probability
 
-    # **************************************************************************************************************************************
     # calculation of occupation probability, recombination efficiency and rate of recombination for simple SRH
-    # **************************************************************************************************************************************
 
     # matirx of carrier denisity [ET x NVb]
     ocp.n = numpy.broadcast_to(dos.n, (egrid.ET.size, VB.NVb)).T
@@ -65,9 +63,7 @@ def occupation_probability(data):
 
     ocp.R_srh_s = inputs.Nt * ocp.eta_R_s  # rate of recombination
 
-    # **************************************************************************************************************************************
     # calculation of occupation probability, recombination efficiency and rate of recombination for radiative capture
-    # **************************************************************************************************************************************
 
     # matrix of e-capture coefficient for radiative SRH
     ocp.beta_n_r = numpy.broadcast_to(tsr.r_sign, (VB.NVb, egrid.ET.size))
@@ -92,9 +88,7 @@ def occupation_probability(data):
 
     ocp.R_srh_r = inputs.Nt * ocp.eta_R_r  # rate of recombination
 
-    # **************************************************************************************************************************************
     # calculation of occupation probability, recombination efficiency and rate of recombination for radiative capture
-    # **************************************************************************************************************************************
 
     # matrix of e-capture coefficient for multiphonon SRH
     ocp.beta_n_m = numpy.broadcast_to(tsm.mp_sign, (VB.NVb, egrid.ET.size))
@@ -126,9 +120,7 @@ def occupation_probability(data):
 
     ocp.f_T_m_1 = (1-ocp.f_T_m)
 
-    # **************************************************************************************************************************************
     # calculation of occupation probability, recombination efficiency and rate of recombination for radiative and multiphonon capture
-    # **************************************************************************************************************************************
 
     ocp.beta_n = ocp.beta_n_r + ocp.beta_n_m  # combined e-capture coefficient
     ocp.beta_p = ocp.beta_p_r + ocp.beta_p_m  # combined h-capture coefficient
@@ -187,4 +179,3 @@ def eta_R_normalized(data):
 
     eta_nr.eta_R_max = numpy.amax(ocp.eta_R, axis=1)
     eta_nr.eta_R_norm = (ocp.eta_R.T / eta_nr.eta_R_max).T
-

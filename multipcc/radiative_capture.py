@@ -5,12 +5,12 @@ from scipy.special import gamma
 from scipy.special import iv
 from multipcc.utils import w_function, w_function_2
 
-# **********************************************************************************************************************************************
-# In photon energy grid all matrices are 2D. Along rows, ET remains fixed. along columns Ek remains fixed.
-# Ept increases from left to right due to increase in Ek from left to right and increases from top to bottom due to increase of ET from top to bottom
-# **********************************************************************************************************************************************
 
 def photon_energy(data):
+    '''
+        In photon energy grid all matrices are 2D. Along rows, ET remains fixed. along columns Ek remains fixed.
+        Ept increases from left to right due to increase in Ek from left to right and increases from top to bottom due to increase of ET from top to bottom
+    '''
     phycon = data.root.physical_constants
     derived = data.root.derived
     mat = data.root.matrix
@@ -22,13 +22,10 @@ def photon_energy(data):
     pgrid.theta = mat.Ek2D/mat.ET2D  # theta grid of the shape of Ept
 
 
-# **********************************************************************************************************************************************
-# In charge state grid, all matrices are 3D, formed by repeating the matrices of photon energy grid three times for three charge states.
-# ET,Ek,deltaE and nu consist of three equal blocks.
-# mu is -nu, 0 and nu for -ve, neutral and +ve charge state respectively.
-# **********************************************************************************************************************************************
-
 def charge_states(data):
+    '''
+     In charge state grid, all matrices are 3D, formed by repeating the matrices of photon energy grid three times for three charge states. ET,Ek,deltaE and nu consist of three equal blocks. mu is -nu, 0 and nu for -ve, neutral and +ve charge state respectively.
+    '''
     phycon = data.root.physical_constants
     derived = data.root.derived
     egrid = data.root.energy_grids
@@ -58,15 +55,14 @@ def broadening_function(data):
         hrf.SHR * inputs.Eph * phycon.eVJ / (phycon.kB * inputs.T)) * bfunc.bessel
 
 
-# **********************************************************************************************************************************************
-# Photoionization cross section found using eq.5.91 from QPC by BKR. Unit is [m^2].
-# For negative charege state the values will be invalid for nu >= 0.5. So nu is taken from 0.5.
-# The remaining of the calculations are done keepting those values masked.
-# The cross section is weighted to the unoccupied states to get rid of the final state energy dependence
-# The weighted p_crosssection is multiplied by the thermal velocity to get the coefficient
-# **********************************************************************************************************************************************
-
 def photoionization_cross_section(data):
+    '''
+    Photoionization cross section found using eq.5.91 from QPC by BKR. Unit is [m^2].
+    For negative charege state the values will be invalid for nu >= 0.5. So nu is taken from 0.5.
+    The remaining of the calculations are done keepting those values masked.
+    The cross section is weighted to the unoccupied states to get rid of the final state energy dependence
+    The weighted p_crosssection is multiplied by the thermal velocity to get the coefficient
+    '''
     phycon = data.root.physical_constants
     inputs = data.root.inputs
     derived = data.root.derived
@@ -115,13 +111,13 @@ def photoionization_cross_section(data):
         data, pion.sigma_k_Energy, 2) * inputs.v_th
     #pion.Ccoeff = pion.Ccoeff * bfunc.broadening
 
-# **********************************************************************************************************************************************
-# Capture cross section is found using eq 5.30 of QPC by BKR. Unit is [m^2].
-# The photon wave cector q in eq 5.30 is found using eq. 5.72 by replacing the numerator with our photon energy Ept.
-# **********************************************************************************************************************************************
 
 
 def radiative_capture_cross_section(data):
+    '''
+    Capture cross section is found using eq 5.30 of QPC by BKR. Unit is [m^2].
+    The photon wave cector q in eq 5.30 is found using eq. 5.72 by replacing the numerator with our photon energy Ept.
+    '''
     phycon = data.root.physical_constants
     inputs = data.root.inputs
     derived = data.root.derived
@@ -144,14 +140,13 @@ def radiative_capture_cross_section(data):
     rcapt.extrafactor = rcapt.Ccoeff / pion.Ccoeff
 
 
-# **********************************************************************************************************************************************
-# Chosing the right capture coefficinets according to charge state.
-# When the capture is from CB, the corresponding photo energy decreases as in the begining the trap is close to the VB. Thus the rates of capture
-# from the CB are always reversed.
-# when the state is charged, the coefficent of capture is enhanced by coulomb factor / sommerfeld factor
-# **********************************************************************************************************************************************
-
 def trap_state_rc(data):
+    '''
+    Chosing the right capture coefficinets according to charge state.
+    When the capture is from CB, the corresponding photo energy decreases as in the begining the trap is close to the VB. Thus the rates of capture
+    from the CB are always reversed.
+    when the state is charged, the coefficent of capture is enhanced by coulomb factor / sommerfeld factor
+    '''
     inputs = data.root.inputs
     rate = data.root.rate_of_capture
     rcapt = data.root.radiative_capture_cross_section
@@ -170,5 +165,3 @@ def trap_state_rc(data):
         tsr.r_sign = pion.Ccoeff[1, :][::-1]
         # hole capture coefficent from the acceptor to VB(initial charge state -ve)
         tsr.r_sigp = derived.sa * pion.Ccoeff[0, :]
-
-
