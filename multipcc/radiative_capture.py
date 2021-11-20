@@ -3,8 +3,7 @@ import math
 import scipy.constants
 from scipy.special import gamma
 from scipy.special import iv
-from multipcc import weighing_function
-
+from multipcc.utils import w_function, w_function_2
 
 # **********************************************************************************************************************************************
 # In photon energy grid all matrices are 2D. Along rows, ET remains fixed. along columns Ek remains fixed.
@@ -96,7 +95,7 @@ def photoionization_cross_section(data):
     pion.PCS_E = numpy.ma.masked_less_equal(pion.PCS_E, 0)
 
     # weighed by density of unoccupied states per volume
-    pion.PCS = weighing_function.w_function_2(data, pion.PCS_E, 2)
+    pion.PCS = w_function_2(data, pion.PCS_E, 2)
     pion.PCoeff = pion.PCS * inputs.v_th  # photoionization coefficient
 
     pion.sa = 4 * math.sqrt(scipy.pi * derived.r_eh * phycon.eVJ /
@@ -112,7 +111,7 @@ def photoionization_cross_section(data):
         (cgrid.mu + 1) * numpy.arctan(numpy.sqrt(cgrid.theta))))**2 / (cgrid.theta * (1 + cgrid.theta)**(cgrid.mu + 1)))
     pion.sigma_k_Energy = pion.sigma_k_c * pion.sigma_k_mu * pion.sigma_k_E
     # weighed by density of unoccupied states per volume
-    pion.Ccoeff = weighing_function.w_function(
+    pion.Ccoeff = w_function(
         data, pion.sigma_k_Energy, 2) * inputs.v_th
     #pion.Ccoeff = pion.Ccoeff * bfunc.broadening
 
@@ -140,7 +139,7 @@ def radiative_capture_cross_section(data):
     # capture cross section before weighing or summation overEk
     rcapt.CCS_E = numpy.ma.masked_array(rcapt.CCS_E, pion.PCS_E.mask)
     # weighed by density of unoccupied states per volume
-    rcapt.CCS = weighing_function.w_function(data, rcapt.CCS_E, 2)
+    rcapt.CCS = w_function(data, rcapt.CCS_E, 2)
     rcapt.Ccoeff = rcapt.CCS * inputs.v_th  # capture coefficient
     rcapt.extrafactor = rcapt.Ccoeff / pion.Ccoeff
 
