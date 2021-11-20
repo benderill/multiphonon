@@ -13,7 +13,7 @@ def main(data, obj, output):
     physical_constants.physical_constants(data)
     input_data.input_parameters(data, obj)
     input_data.derived_parameters(data)
-    bias_voltage.biasVoltage(data)
+    bias_voltage.bias_voltage(data)
     mesh.energy_grids(data)
     mesh.matrices(data)
 

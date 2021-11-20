@@ -1,9 +1,8 @@
 import numpy
-import scipy.constants
 from scipy.special import cbrt
 
 
-def biasVoltage(data):
+def bias_voltage(data):
     inputs = data.root.inputs
     VB = data.root.bias_voltage
 
