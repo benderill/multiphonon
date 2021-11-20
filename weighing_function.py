@@ -1,0 +1,48 @@
+import numpy
+import scipy
+import h5
+
+
+def w_function(data, arg, axis):
+    phycon = data.root.physical_constants
+    inputs = data.root.inputs
+    mat = data.root.matrix
+    wf = data.root.weighing_function 
+    
+    wf.Gc = (8 * scipy.sqrt(2) * scipy.pi / phycon.hplanck**3) * scipy.sqrt(inputs.M_eff)**3 * numpy.sqrt((mat.Ec - inputs.Eg) * phycon.eVJ)    #DOS
+    wf.fE = numpy.exp((inputs.Eg/2 - mat.Ec) * phycon.eVJ / (phycon.kB * inputs.T))     #fermidirac fucntion
+
+    wf.pear = wf.Gc * wf.fE * inputs.dE * phycon.eVJ                                    #carrier density per volume per energy
+    
+
+    wf.weighted_numerator = (arg * wf.pear).sum(axis=axis)                              #function weighted to occupied states
+    wf.denominator = wf.pear.sum(axis=0)                                                #total number of carrier per volume, after integration over energy
+    wf.weighted_func = wf.weighted_numerator / wf.denominator                           #weighted function
+    return(wf.weighted_func)
+
+def w_function_2(data, arg, axis):
+    phycon = data.root.physical_constants
+    inputs = data.root.inputs
+    mat = data.root.matrix
+    wf2 = data.root.weighing_function 
+    
+    wf2.Gc = (8 * scipy.sqrt(2) * scipy.pi / phycon.hplanck**3) * scipy.sqrt(inputs.M_eff)**3 * numpy.sqrt((mat.Ec - inputs.Eg) * phycon.eVJ)   #DOS
+    wf2.fE = numpy.exp((inputs.Eg/2 - mat.Ec) * phycon.eVJ / (phycon.kB * inputs.T))        #fermidirac fucntion
+
+    
+    wf2.pear = wf2.Gc * (1 - wf2.fE) * inputs.dE * phycon.eVJ                           #no of empty states per volume per energy
+
+    wf2.weighted_numerator = (arg * wf2.pear).sum(axis=axis)                            #function weighted to unoccupied states
+    wf2.denominator = wf2.pear.sum(axis=0)                                              #total number of empty states  volume, after integration over energy
+    wf2.weighted_func = wf2.weighted_numerator / wf2.denominator                        #weighted function
+    return(wf2.weighted_func)
+
+
+
+
+if __name__ == "__main__":
+    data = h5.H5()
+    data.filename = "C:/Users/basit/Simulations_and_results/Data/Paper1/SRH_deep_defects/Peros_Case_3.h5"
+    with open('output.txt', 'w+') as output:
+        main(data, input_peros, output)
+

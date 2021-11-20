@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.202
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "SRH recombination via deep defects", "SRH recombination via deep defects.pyproj", "{2F4BF166-CFAB-4DA4-AB73-3334180AB8DE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2F4BF166-CFAB-4DA4-AB73-3334180AB8DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F4BF166-CFAB-4DA4-AB73-3334180AB8DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D6E3AA90-4965-494D-87C7-7A955EE577CC}
+	EndGlobalSection
+EndGlobal
