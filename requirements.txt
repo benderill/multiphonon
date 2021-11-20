@@ -1,0 +1,5 @@
+numpy==1.21.4
+h5py==3.4.0
+addict==2.4.0
+scipy==1.7.2
+matplotlib==3.5.0
