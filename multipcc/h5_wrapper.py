@@ -14,6 +14,35 @@ import copy
 
 
 class H5():
+    def __init__(self, *data):
+        self.root = Dict()
+        self.filename = None
+        for i in data:
+            self.root.update(copy.deepcopy(i))
+
+    def __str__(self):
+        temp = []
+        temp.append('Filename = %s' % self.filename)
+        temp.append(self.pp.pformat(self.root))
+        return '\n'.join(temp)
+
+    def __getitem__(self, key):
+        key = key.lower()
+        obj = self.root
+        for i in key.split('/'):
+            if i:
+                obj = obj[i]
+        return obj
+
+    def __setitem__(self, key, value):
+        key = key.lower()
+        obj = self.root
+        parts = key.split('/')
+        for i in parts[:-1]:
+            if i:
+                obj = obj[i]
+        obj[parts[-1]] = value
+
     pp = pprint.PrettyPrinter(indent=4)
 
     def transform(self, x):
@@ -21,12 +50,6 @@ class H5():
 
     def inverse_transform(self, x):
         return x
-
-    def __init__(self, *data):
-        self.root = Dict()
-        self.filename = None
-        for i in data:
-            self.root.update(copy.deepcopy(i))
 
     def load(self):
         if self.filename is not None:
@@ -51,31 +74,8 @@ class H5():
         else:
             print("Filename must be set before save can be used")
 
-    def __str__(self):
-        temp = []
-        temp.append('Filename = %s' % self.filename)
-        temp.append(self.pp.pformat(self.root))
-        return '\n'.join(temp)
-
     def update(self, merge):
         self.root.update(merge.root)
-
-    def __getitem__(self, key):
-        key = key.lower()
-        obj = self.root
-        for i in key.split('/'):
-            if i:
-                obj = obj[i]
-        return obj
-
-    def __setitem__(self, key, value):
-        key = key.lower()
-        obj = self.root
-        parts = key.split('/')
-        for i in parts[:-1]:
-            if i:
-                obj = obj[i]
-        obj[parts[-1]] = value
 
 
 def recursively_load(h5file, path, func):
