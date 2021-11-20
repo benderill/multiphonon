@@ -1,7 +1,5 @@
 import numpy
 import scipy
-import h5
-
 
 def w_function(data, arg, axis):
     phycon = data.root.physical_constants

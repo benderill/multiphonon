@@ -1,12 +1,9 @@
 import numpy
 import math
 import scipy.constants
-from scipy.special import cbrt
 from scipy.special import gamma
 from scipy.special import iv
-import h5
-import weighing_function
-import matplotlib.pyplot as plt
+from multipcc import weighing_function
 
 
 # **********************************************************************************************************************************************

@@ -1,4 +1,4 @@
-import h5
+from multipcc import h5
 import matplotlib.pyplot as plt
 import numpy
 
