@@ -1,12 +1,12 @@
 from multipcc import h5_wrapper
 import matplotlib.pyplot as plt
-import numpy
+import numpy as np
 
 
 def plot_nu(data):
     egrid = data.root.energy_grids
     hrf = data.root.huang_rhys_factor
-    plt.xticks(numpy.arange(0, egrid.ET[-1], 0.1))
+    plt.xticks(np.arange(0, egrid.ET[-1], 0.1))
     plt.title('nu')
     plt.xlabel(r'Defect energy level $E_T$ [eV]')
     plt.ylabel('nu')
@@ -19,7 +19,7 @@ def plot_nu(data):
 def plot_HRF(data):
     egrid = data.root.energy_grids
     hrf = data.root.huang_rhys_factor
-    plt.xticks(numpy.arange(0, egrid.ET[-1], 0.1))
+    plt.xticks(np.arange(0, egrid.ET[-1], 0.1))
     plt.title(r'Huang Rhys Factor $S_{HR}$')
     plt.xlabel(r'Defect energy level $E_T$ [eV]')
     plt.ylabel(r'Huang Rhys Factor $S_{HR}$')
@@ -38,7 +38,7 @@ def plot_radiative_capture_coefficients(data):
     bfunc = data.root.broadening_function
 
     plt.title('Radiative capture coefficients')
-    plt.xticks(numpy.arange(0, egrid.ET[-1], 0.1))
+    plt.xticks(np.arange(0, egrid.ET[-1], 0.1))
     plt.ylabel(r'Capture coefficients $k_{n/p}$ [$cm^3/s$]')
     plt.xlabel(r'Defect energy level $E_T$ [eV]')
     plt.semilogy(egrid.ET, tsr.r_sign * 1e6, label=r'$k_n$')
@@ -52,7 +52,7 @@ def plot_multiphonon_capture_coefficients(data):
     egrid = data.root.energy_grids
 
     # plt.ylim(1e-18,1e-3)
-    plt.xticks(numpy.arange(0, egrid.ET[-1], 0.1))
+    plt.xticks(np.arange(0, egrid.ET[-1], 0.1))
     plt.title('Multiphonon capture coefficinets')
     plt.xlabel(r'Defect energy level $E_T$ [eV]')
     plt.ylabel(r'Capture coefficients $k_{n/p}$ [$cm^3/s$]')
@@ -96,14 +96,14 @@ def twinx_rad(data):
     ax1.set_xlabel(r'Defect energy level $E_T$ [eV]')
     ax1.set_ylabel(r"Rate $[1/s]$")
     ax1.set_ylim(1e-14, 1e4)
-    ax1.xaxis.set_ticks(numpy.arange(0, egrid.ET[-1], 0.1))
+    ax1.xaxis.set_ticks(np.arange(0, egrid.ET[-1], 0.1))
     for label in ax1.get_yticklabels():
         label.set_color("black")
 
     ax2 = ax1.twinx()
     plt.plot(egrid.ET, ocp.f_T_r[5, :],
              label=r"$f_{T}$", color="#000000", linestyle='-')
-    plt.plot(egrid.ET, 0.5 * numpy.ones(len(egrid.ET)),
+    plt.plot(egrid.ET, 0.5 * np.ones(len(egrid.ET)),
              color="#000000", linestyle=':')
     ax2.set_xlabel(r'Defect energy level $E_T$ [eV]')
     ax2.set_ylabel(r"Occupation probability $f_T$")
@@ -138,14 +138,14 @@ def twinx_mp(data):
     ax1.set_xlabel("Trap energy [eV]")
     ax1.set_ylabel(r"Rate $[1/s]$")
     ax1.set_ylim(1e-7, 1e14)
-    ax1.xaxis.set_ticks(numpy.arange(0, egrid.ET[-1], 0.1))
+    ax1.xaxis.set_ticks(np.arange(0, egrid.ET[-1], 0.1))
     for label in ax1.get_yticklabels():
         label.set_color("black")
 
     ax2 = ax1.twinx()
     plt.plot(egrid.ET, ocp.f_T_m[5, :],
              label=r"$f_{T}$", color="#000000", linestyle='-')
-    plt.plot(egrid.ET, 0.5 * numpy.ones(len(egrid.ET)),
+    plt.plot(egrid.ET, 0.5 * np.ones(len(egrid.ET)),
              color="#000000", linestyle=':')
     ax2.set_xlabel(r'Defect energy level $E_T$ [eV]')
     ax2.set_ylabel(r"Occupation probability $f_{T}$")
@@ -180,14 +180,14 @@ def twinx_combined(data):
     ax1.set_xlabel(r'Defect energy level $E_T$ [eV]')
     ax1.set_ylabel(r"Rate $[1/s]$")
     ax1.set_ylim(1e-7, 1e14)
-    ax1.xaxis.set_ticks(numpy.arange(0, egrid.ET[-1], 0.1))
+    ax1.xaxis.set_ticks(np.arange(0, egrid.ET[-1], 0.1))
     for label in ax1.get_yticklabels():
         label.set_color("black")
 
     ax2 = ax1.twinx()
     plt.plot(egrid.ET, ocp.f_T[5, :],
              label=r"$f_{T}$", color="#000000", linestyle='-')
-    plt.plot(egrid.ET, 0.5 * numpy.ones(len(egrid.ET)),
+    plt.plot(egrid.ET, 0.5 * np.ones(len(egrid.ET)),
              color="#000000", linestyle=':')
     ax2.set_xlabel(r'Defect energy level $E_T$ [eV]')
     ax2.set_ylabel(r"Occupation probability $f_T$")
@@ -221,14 +221,14 @@ def twinx_constant(data):
     ax1.set_xlabel(r'Defect energy level $E_T$ [eV]')
     ax1.set_ylabel(r"Rate $[1/s]$")
     ax1.set_ylim(1e-7, 1e9)
-    ax1.xaxis.set_ticks(numpy.arange(0, egrid.ET[-1], 0.1))
+    ax1.xaxis.set_ticks(np.arange(0, egrid.ET[-1], 0.1))
     for label in ax1.get_yticklabels():
         label.set_color("black")
 
     ax2 = ax1.twinx()
     plt.plot(egrid.ET, ocp.f_T_s[10, :],
              label=r"$f_{T}$", color="#000000", linestyle='-')
-    plt.plot(egrid.ET, 0.5 * numpy.ones(len(egrid.ET)),
+    plt.plot(egrid.ET, 0.5 * np.ones(len(egrid.ET)),
              color="#000000", linestyle=':')
     ax2.set_xlabel(r'Defect energy level $E_T$ [eV]')
     ax2.set_ylabel(r"Occupation probability $f_Tc$")
@@ -247,7 +247,7 @@ def plot_occupation_probability(data):
     plt.title('Trap occupation probability due to constant capture coefficient')
     plt.ylabel(r'Occupation probability $f_T$')
     plt.xlabel(r'Defect energy level $E_T$ [eV]')
-    plt.xticks(numpy.arange(0, egrid.ET[-1], 0.1))
+    plt.xticks(np.arange(0, egrid.ET[-1], 0.1))
 
     plt.plot(egrid.ET, ocp.f_T_s[0, :], label='0.0V')
     plt.plot(egrid.ET, ocp.f_T_s[1, :], label='0.1V')
@@ -266,7 +266,7 @@ def plot_occupation_probability(data):
     plt.title('Trap occupation probability due to radiative capture')
     plt.ylabel(r'Occupation probability $f_T$')
     plt.xlabel(r'Defect energy level $E_T$ [eV]')
-    plt.xticks(numpy.arange(0, egrid.ET[-1], 0.1))
+    plt.xticks(np.arange(0, egrid.ET[-1], 0.1))
     plt.plot(egrid.ET, ocp.f_T_r[0, :], label='0.0V')
     plt.plot(egrid.ET, ocp.f_T_r[1, :], label='0.1V')
     plt.plot(egrid.ET, ocp.f_T_r[2, :], label='0.2V')
@@ -284,7 +284,7 @@ def plot_occupation_probability(data):
     plt.title('Trap occupation probability due to multiphonon capture')
     plt.ylabel(r'Occupation probability $f_T$')
     plt.xlabel(r'Defect energy level $E_T$ [eV]')
-    plt.xticks(numpy.arange(0, egrid.ET[-1], 0.1))
+    plt.xticks(np.arange(0, egrid.ET[-1], 0.1))
     plt.plot(egrid.ET, ocp.f_T_m[0, :], label='0.0V')
     plt.plot(egrid.ET, ocp.f_T_m[1, :], label='0.1V')
     plt.plot(egrid.ET, ocp.f_T_m[2, :], label='0.2V')
@@ -302,7 +302,7 @@ def plot_occupation_probability(data):
     plt.title('Trap occupation probability due to combined capture')
     plt.ylabel(r'Occupation probability $f_T$')
     plt.xlabel(r'Defect energy level $E_T$ [eV]')
-    plt.xticks(numpy.arange(0, egrid.ET[-1], 0.1))
+    plt.xticks(np.arange(0, egrid.ET[-1], 0.1))
     plt.plot(egrid.ET, ocp.f_T[0, :], label='0.0V')
     plt.plot(egrid.ET, ocp.f_T[1, :], label='0.1V')
     plt.plot(egrid.ET, ocp.f_T[2, :], label='0.2V')
@@ -326,7 +326,7 @@ def plot_recombination_efficiency(data):
     plt.ylabel(r'recombination efficiency $\eta_R$ $[1/s]$')
     plt.xlabel(r'Defect energy level $E_T$ [eV]')
 
-    plt.xticks(numpy.arange(0, egrid.ET[-1], 0.1))
+    plt.xticks(np.arange(0, egrid.ET[-1], 0.1))
     #plt.semilogy(egrid.ET, ocp.eta_R_s[0,:],label='0.0V')
     plt.semilogy(egrid.ET, ocp.eta_R_s[1, :], label='0.1V')
     plt.semilogy(egrid.ET, ocp.eta_R_s[2, :], label='0.2V')
@@ -344,7 +344,7 @@ def plot_recombination_efficiency(data):
     plt.title('Recombination effciency due to radaitive transitions')
     plt.ylabel(r'recombination efficiency $\eta_R$ $[1/s]$')
     plt.xlabel(r'Defect energy level $E_T$ [eV]')
-    plt.xticks(numpy.arange(0, egrid.ET[-1], 0.1))
+    plt.xticks(np.arange(0, egrid.ET[-1], 0.1))
 
     #plt.semilogy(egrid.ET, ocp.eta_R_r[0,:],label='0.0Vr')
     plt.semilogy(egrid.ET, ocp.eta_R_r[1, :], label='0.1V')
@@ -363,7 +363,7 @@ def plot_recombination_efficiency(data):
     plt.title('Recombination effciency due to multiphonon capture')
     plt.ylabel(r'recombination efficiency $\eta_R$ $[1/s]$')
     plt.xlabel(r'Defect energy level $E_T$ [eV]')
-    plt.xticks(numpy.arange(0, egrid.ET[-1], 0.1))
+    plt.xticks(np.arange(0, egrid.ET[-1], 0.1))
     # plt.ylim(1e-8,1e7)
     #plt.semilogy(egrid.ET, ocp.eta_R_m[0,:],label='0.0Vm')
     plt.semilogy(egrid.ET, ocp.eta_R_m[1, :], label='0.1V')
@@ -382,7 +382,7 @@ def plot_recombination_efficiency(data):
     plt.title('Recombination efficiency due to combined capture')
     plt.ylabel(r'recombination efficiency $\eta_R$ $[1/s]$')
     plt.xlabel(r'Defect energy level $E_T$ [eV]')
-    plt.xticks(numpy.arange(0, egrid.ET[-1], 0.1))
+    plt.xticks(np.arange(0, egrid.ET[-1], 0.1))
     # plt.ylim(1e-7,1e7)
     #plt.semilogy(egrid.ET, ocp.eta_R[0,:],label='0.0Vc')
     plt.semilogy(egrid.ET, ocp.eta_R[1, :], label='0.1V')

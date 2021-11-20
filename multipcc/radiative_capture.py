@@ -1,5 +1,5 @@
-import numpy
 import math
+import numpy as np
 import scipy.constants
 from scipy.special import gamma
 from scipy.special import iv
@@ -17,7 +17,7 @@ def photon_energy(data):
     egrid = data.root.energy_grids
     pgrid = data.root.photon_energy
 
-    pgrid.Ept = ((numpy.zeros(mat.mat2D.shape) + egrid.Ek).T +
+    pgrid.Ept = ((np.zeros(mat.mat2D.shape) + egrid.Ek).T +
                  egrid.ET).T  # photon energy grid
     pgrid.theta = mat.Ek2D/mat.ET2D  # theta grid of the shape of Ept
 
@@ -33,12 +33,12 @@ def charge_states(data):
     pgrid = data.root.photon_energy
     cgrid = data.root.charge_states
 
-    cgrid.mu = numpy.array(
+    cgrid.mu = np.array(
         [-mat.nu2D, mat.nu2D*1e-6, mat.nu2D])  # mu is 3D matrix
     # Ept grid of the shape of mu
-    cgrid.Ept = numpy.array([pgrid.Ept, pgrid.Ept, pgrid.Ept])
+    cgrid.Ept = np.array([pgrid.Ept, pgrid.Ept, pgrid.Ept])
     # theta grid of the shape of mu
-    cgrid.theta = numpy.array([pgrid.theta, pgrid.theta, pgrid.theta])
+    cgrid.theta = np.array([pgrid.theta, pgrid.theta, pgrid.theta])
 
 
 def broadening_function(data):
@@ -79,16 +79,16 @@ def photoionization_cross_section(data):
 
     pion.PCS_C = (16 / 3) * phycon.alpha * phycon.a_br**2 * phycon.r_h * phycon.eVJ * (1 / derived.eta_r) * \
         (phycon.m_e / inputs.M_eff) * (2 * scipy.pi) * \
-        (numpy.sqrt(2 * inputs.M_eff) / phycon.hbar)**3
+        (np.sqrt(2 * inputs.M_eff) / phycon.hbar)**3
     pion.Gamma = (gamma(cgrid.mu + 1))**2 / gamma(2 * cgrid.mu + 1)
     pion.PCS_vMu = (2**(2 * cgrid.mu)) * pion.Gamma * \
         (mat.nu3D * derived.a_ebr)**3
-    pion.PCS_vE = ((numpy.sqrt(mat.Ek3D * phycon.eVJ))**3 / (cgrid.Ept * phycon.eVJ)) * ((numpy.sin((cgrid.mu + 1)
-                                                                                                    * numpy.arctan(numpy.sqrt(cgrid.theta))))**2 / (cgrid.theta * (1 + cgrid.theta)**(cgrid.mu + 1)))
+    pion.PCS_vE = ((np.sqrt(mat.Ek3D * phycon.eVJ))**3 / (cgrid.Ept * phycon.eVJ)) * ((np.sin((cgrid.mu + 1)
+                                                                                                    * np.arctan(np.sqrt(cgrid.theta))))**2 / (cgrid.theta * (1 + cgrid.theta)**(cgrid.mu + 1)))
 
     pion.PCS_E = pion.PCS_C * pion.PCS_vMu * pion.PCS_vE
     # photoionization cross section before weighing or summation overEk
-    pion.PCS_E = numpy.ma.masked_less_equal(pion.PCS_E, 0)
+    pion.PCS_E = np.ma.masked_less_equal(pion.PCS_E, 0)
 
     # weighed by density of unoccupied states per volume
     pion.PCS = w_function_2(data, pion.PCS_E, 2)
@@ -103,8 +103,8 @@ def photoionization_cross_section(data):
     pion.sigma_k_gamma = (gamma(cgrid.mu + 1))**2 / gamma(2 * cgrid.mu + 1)
     pion.sigma_k_mu = (2**(2 * cgrid.mu)) * \
         pion.sigma_k_gamma * (mat.nu3D * derived.a_ebr)**3
-    pion.sigma_k_E = (mat.Ek3D * phycon.eVJ * (cgrid.Ept * phycon.eVJ)**2 / (cgrid.Ept * phycon.eVJ)) * ((numpy.sin(
-        (cgrid.mu + 1) * numpy.arctan(numpy.sqrt(cgrid.theta))))**2 / (cgrid.theta * (1 + cgrid.theta)**(cgrid.mu + 1)))
+    pion.sigma_k_E = (mat.Ek3D * phycon.eVJ * (cgrid.Ept * phycon.eVJ)**2 / (cgrid.Ept * phycon.eVJ)) * ((np.sin(
+        (cgrid.mu + 1) * np.arctan(np.sqrt(cgrid.theta))))**2 / (cgrid.theta * (1 + cgrid.theta)**(cgrid.mu + 1)))
     pion.sigma_k_Energy = pion.sigma_k_c * pion.sigma_k_mu * pion.sigma_k_E
     # weighed by density of unoccupied states per volume
     pion.Ccoeff = w_function(
@@ -133,7 +133,7 @@ def radiative_capture_cross_section(data):
                                                   (phycon.c / derived.eta_r)**2 * mat.Ek3D * phycon.eVJ)  # DIMENSIONLESS
     rcapt.CCS_E = rcapt.factor * pion.PCS_E
     # capture cross section before weighing or summation overEk
-    rcapt.CCS_E = numpy.ma.masked_array(rcapt.CCS_E, pion.PCS_E.mask)
+    rcapt.CCS_E = np.ma.masked_array(rcapt.CCS_E, pion.PCS_E.mask)
     # weighed by density of unoccupied states per volume
     rcapt.CCS = w_function(data, rcapt.CCS_E, 2)
     rcapt.Ccoeff = rcapt.CCS * inputs.v_th  # capture coefficient

@@ -1,22 +1,22 @@
-import numpy
-import scipy.constants
 import math
+import numpy as np
+import scipy.constants
 import scipy.integrate
 from scipy.special import cbrt
 
 
 def integrand(x, a, b, c):  # integration I(a,b,c)
-    return ((x**a)*(numpy.sin(b*numpy.arctan(c*x))**2))/((1+(c*x)**2)**b)
+    return ((x**a)*(np.sin(b*np.arctan(c*x))**2))/((1+(c*x)**2)**b)
 
 
-integrand_vec = numpy.vectorize(integrand)
+integrand_vec = np.vectorize(integrand)
 
 
 def quad(func, a, b, c):
     return scipy.integrate.quad(func, 0, 1, (a, b, c))
 
 
-quad_vec = numpy.vectorize(quad)
+quad_vec = np.vectorize(quad)
 
 
 def derived_parameters(data):
@@ -48,7 +48,7 @@ def Huang_Rhys_Factor_deformation_potential_coupling(data):
         (2 * inputs.Mr * mpder.omega / phycon.hbar)  # deformation coupling
     print(hrfd.SHRD)
     # array of the three differnt values of mu depending on charge state. The value of mu for
-    hrfd.mu = numpy.array([-egrid.nu, egrid.nu*1e-6, egrid.nu])
+    hrfd.mu = np.array([-egrid.nu, egrid.nu*1e-6, egrid.nu])
     # neutral charge state was supposed to be zero but has been given a small value to avoid
     # division by zero error.
     hrfd.a = 0
@@ -76,7 +76,7 @@ def Huang_Rhys_Factor_polar_coupling(data):
                                                               * inputs.Eph * phycon.eVJ / (inputs.Mr * (mpder.q_D**2)) * mpder.pekar)  # polar coupling
     print(hrfp.SHRP)
     # array of the three differnt values of mu depending on charge state. The value of mu for
-    hrfp.mu = numpy.array([-egrid.nu, egrid.nu*1e-6, egrid.nu])
+    hrfp.mu = np.array([-egrid.nu, egrid.nu*1e-6, egrid.nu])
     # neutral charge state was supposed to be zero but has been given a small value to avoid
     # division by zero error.
     hrfp.a = -2
@@ -100,7 +100,7 @@ def Huang_Rhys_factor(data):
     hrf = data.root.huang_rhys_factor
 
     # array of the three differnt values of mu depending on charge state. The value of mu for
-    hrf.mu = numpy.array([-egrid.nu, egrid.nu*1e-6, egrid.nu])
+    hrf.mu = np.array([-egrid.nu, egrid.nu*1e-6, egrid.nu])
     # neutral charge state was supposed to be zero but has been given a small value to avoid
     # division by zero error.
 
@@ -125,26 +125,26 @@ def multiphonon_capture_coefficients(data):
 
     mpcoef.theta = (inputs.Eph * phycon.eVJ) / (2 * phycon.kB * inputs.T)
     # round to next highest integer
-    mpcoef.p = numpy.ceil(egrid.ET / inputs.Eph)
-    mpcoef.p_vec = numpy.ones(hrf.mu.shape) * \
+    mpcoef.p = np.ceil(egrid.ET / inputs.Eph)
+    mpcoef.p_vec = np.ones(hrf.mu.shape) * \
         mpcoef.p  # matching the shape of mu
 
-    mpcoef.X = numpy.zeros(hrf.SHR.shape)
+    mpcoef.X = np.zeros(hrf.SHR.shape)
     mpcoef.X[hrf.SHR < mpcoef.p_vec] = hrf.SHR[hrf.SHR < mpcoef.p_vec] / \
         (mpcoef.p_vec[hrf.SHR < mpcoef.p_vec] * math.sinh(mpcoef.theta))
     mpcoef.X[hrf.SHR > mpcoef.p_vec] = mpcoef.p_vec[hrf.SHR > mpcoef.p_vec] / \
         (hrf.SHR[hrf.SHR > mpcoef.p_vec] * math.sinh(mpcoef.theta))
-    mpcoef.sa = numpy.array([mpder.sa, 1, mpder.sa])
+    mpcoef.sa = np.array([mpder.sa, 1, mpder.sa])
 
-    mpcoef.Y = numpy.sqrt(1 + mpcoef.X**2)
+    mpcoef.Y = np.sqrt(1 + mpcoef.X**2)
     mpcoef.V_T = (4 / 3) * scipy.pi * (derived.a_ebr *
                                        egrid.nu / 2)**3  # volume of the wave function
     mpcoef.k1 = (mpcoef.V_T) * ((mpcoef.p**2) * mpder.omega *
-                                math.sqrt(2 * scipy.pi)) / (numpy.sqrt(mpcoef.p * mpcoef.Y))
+                                math.sqrt(2 * scipy.pi)) / (np.sqrt(mpcoef.p * mpcoef.Y))
     mpcoef.k2 = mpcoef.theta + mpcoef.Y - mpcoef.X * \
-        math.cosh(mpcoef.theta) - numpy.log((1 + mpcoef.Y) / mpcoef.X)
+        math.cosh(mpcoef.theta) - np.log((1 + mpcoef.Y) / mpcoef.X)
     # recombination coefficients in m^3/s
-    mpcoef.k = mpcoef.k1 * numpy.exp(mpcoef.p * mpcoef.k2)
+    mpcoef.k = mpcoef.k1 * np.exp(mpcoef.p * mpcoef.k2)
 
     mpcoef.capt_cs = mpcoef.k / inputs.v_th  # capture cross section
 

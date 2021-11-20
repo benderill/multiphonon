@@ -3,14 +3,15 @@
 # Depends on h5py, numpy
 
 from addict import Dict
-
 import warnings
+import numpy as np
+import pprint
+import copy
+
 with warnings.catch_warnings():
     warnings.filterwarnings("ignore", category=FutureWarning)
     import h5py
-import numpy
-import pprint
-import copy
+
 
 
 class H5():
@@ -107,52 +108,52 @@ def recursively_save(h5file, path, dic, func):
             raise ValueError("dict keys must be strings to save to hdf5")
         # handle   int, float, string and ndarray of int32, int64, float64
         if isinstance(item, str):
-            h5file[path + func(key)] = numpy.array(item, dtype='S')
+            h5file[path + func(key)] = np.array(item, dtype='S')
 
         elif isinstance(item, int):
-            h5file[path + func(key)] = numpy.array(item, dtype=numpy.int32)
+            h5file[path + func(key)] = np.array(item, dtype=np.int32)
 
         elif isinstance(item, float):
-            h5file[path + func(key)] = numpy.array(item, dtype=numpy.float64)
+            h5file[path + func(key)] = np.array(item, dtype=np.float64)
 
-        elif isinstance(item, numpy.ndarray) and item.dtype == numpy.float64:
+        elif isinstance(item, np.ndarray) and item.dtype == np.float64:
             h5file[path + func(key)] = item
 
-        elif isinstance(item, numpy.ndarray) and item.dtype == numpy.float32:
-            h5file[path + func(key)] = numpy.array(item, dtype=numpy.float64)
+        elif isinstance(item, np.ndarray) and item.dtype == np.float32:
+            h5file[path + func(key)] = np.array(item, dtype=np.float64)
 
-        elif isinstance(item, numpy.ndarray) and item.dtype == numpy.int32:
+        elif isinstance(item, np.ndarray) and item.dtype == np.int32:
             h5file[path + func(key)] = item
 
-        elif isinstance(item, numpy.ndarray) and item.dtype == numpy.int64:
-            h5file[path + func(key)] = item.astype(numpy.int32)
+        elif isinstance(item, np.ndarray) and item.dtype == np.int64:
+            h5file[path + func(key)] = item.astype(np.int32)
 
-        elif isinstance(item, numpy.ndarray) and item.dtype.kind == 'S':
+        elif isinstance(item, np.ndarray) and item.dtype.kind == 'S':
             h5file[path + func(key)] = item
 
         elif isinstance(item, list) and all(isinstance(i, int) for i in item):
-            h5file[path + func(key)] = numpy.array(item, dtype=numpy.int32)
+            h5file[path + func(key)] = np.array(item, dtype=np.int32)
 
         elif isinstance(item, list) and any(isinstance(i, float) for i in item):
-            h5file[path + func(key)] = numpy.array(item, dtype=numpy.float64)
+            h5file[path + func(key)] = np.array(item, dtype=np.float64)
 
-        elif isinstance(item, numpy.int32):
+        elif isinstance(item, np.int32):
             h5file[path + func(key)] = item
 
-        elif isinstance(item, numpy.float64):
+        elif isinstance(item, np.float64):
             h5file[path + func(key)] = item
 
-        elif isinstance(item, numpy.float32):
-            h5file[path + func(key)] = numpy.array(item, dtype=numpy.float64)
+        elif isinstance(item, np.float32):
+            h5file[path + func(key)] = np.array(item, dtype=np.float64)
 
-        elif isinstance(item, numpy.bytes_):
+        elif isinstance(item, np.bytes_):
             h5file[path + func(key)] = item
 
         elif isinstance(item, bytes):
             h5file[path + func(key)] = item
 
         elif isinstance(item, list) and all(isinstance(i, str) for i in item):
-            h5file[path + func(key)] = numpy.array(item, dtype="S")
+            h5file[path + func(key)] = np.array(item, dtype="S")
 
         # save dictionaries
         elif isinstance(item, dict):
