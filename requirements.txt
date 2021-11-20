@@ -3,3 +3,4 @@ h5py
 addict
 scipy
 matplotlib
+json
