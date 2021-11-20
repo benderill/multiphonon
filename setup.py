@@ -1,9 +1,13 @@
-from setuptools import setup
+from setuptools import setup, find_packages
+
+with open("README.md",'rb') as fh:
+    long_description = fh.read()
 
 setup(
-    name='multiphonon',
-    version='0.0.1',
-    description='Multiphonon',
-    py_modules=['multiphonon'],
-    package_dir={'': 'src'},
+    name="multipcc",
+    version="0.0.1",
+    description = ("Calculate multiphonon capture coefficients"),
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    packages=find_packages(),
 )
