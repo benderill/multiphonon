@@ -20,19 +20,16 @@ import multiphonon
 import plot_data
 
 
-def main(data,obj,output):
+def main(data, obj, output):
     description.desciption(data)
     physical_constants.physical_constants(data)
-    input_data.input_parameters(data,obj)
+    input_data.input_parameters(data, obj)
     input_data.derived_parameters(data)
     biasVoltage.biasVoltage(data)
     mesh.energy_grids(data)
     mesh.matrices(data)
-    
-    
-     
 
-    #calculation of capture cross section and capture coefficients due to multiphonon capture
+    # calculation of capture cross section and capture coefficients due to multiphonon capture
     multiphonon.derived_parameters(data)
     multiphonon.Huang_Rhys_Factor_deformation_potential_coupling(data)
     multiphonon.Huang_Rhys_Factor_polar_coupling(data)
@@ -40,23 +37,21 @@ def main(data,obj,output):
     multiphonon.multiphonon_capture_coefficients(data)
     multiphonon.trap_state_mp(data)
 
-
-    #calculation of photoionization cross section, capture cross section & capture coefficients due to radiative capture
+    # calculation of photoionization cross section, capture cross section & capture coefficients due to radiative capture
     radiative_capture.photon_energy(data)
     radiative_capture.charge_states(data)
     radiative_capture.broadening_function(data)
     radiative_capture.photoionization_cross_section(data)
     radiative_capture.radiative_capture_cross_section(data)
     radiative_capture.trap_state_rc(data)
-    
 
-    #calculation of defect occupation probability, recombination efficienecy and rate of SRH recombination
+    # calculation of defect occupation probability, recombination efficienecy and rate of SRH recombination
     taysim.effective_density_of_states(data)
     taysim.occupation_probability(data)
     taysim.eta_R_normalized(data)
     taysim.test(data)
     data.save()
-    
+
     plot_data.plot_nu(data)
     plot_data.plot_HRF(data)
     plot_data.plot_radiative_capture_coefficients(data)
@@ -69,8 +64,7 @@ def main(data,obj,output):
     plot_data.plot_occupation_probability(data)
     plot_data.plot_recombination_efficiency(data)
     plot_data.plot_rate_SRH(data)
-    
-             
+
 
 if __name__ == "__main__":
     data = h5.H5()
