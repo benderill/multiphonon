@@ -1,6 +1,6 @@
 import math
 import numpy as np
-import scipy.constants
+# import scipy.constants
 import scipy.integrate
 from scipy.special import cbrt
 
@@ -26,14 +26,11 @@ def derived_parameters(data):
     mpder = data.root.multiphonon_derived_parameters
 
     # radius of sphere with Brillouin zone volume in metre inverse
-    mpder.q_D = cbrt(6*scipy.pi**2) / inputs.a_0
-    mpder.sa = 4 * math.sqrt(scipy.pi * derived.r_eh *
-                             phycon.eVJ / (phycon.kB * inputs.T))  # sommerfiled factor
-    mpder.pekar = (1 / inputs.epsilon_h) - \
-        (1 / inputs.epsilon_l)  # pekar factor
+    mpder.q_D = cbrt(6*np.pi**2) / inputs.a_0
+    mpder.sa = 4 * math.sqrt(np.pi * derived.r_eh * phycon.eVJ / (phycon.kB * inputs.T))  # sommerfiled factor
+    mpder.pekar = (1 / inputs.epsilon_h) - (1 / inputs.epsilon_l)  # pekar factor
     mpder.V_0 = (inputs.a_0)**3  # volume of the unit cell in cubic meters
-    mpder.omega = (inputs.Eph * phycon.eVJ) / \
-        phycon.hbar  # frequecy of the phonon
+    mpder.omega = (inputs.Eph * phycon.eVJ) / phycon.hbar  # frequecy of the phonon
 
 
 def Huang_Rhys_Factor_deformation_potential_coupling(data):
@@ -137,10 +134,10 @@ def multiphonon_capture_coefficients(data):
     mpcoef.sa = np.array([mpder.sa, 1, mpder.sa])
 
     mpcoef.Y = np.sqrt(1 + mpcoef.X**2)
-    mpcoef.V_T = (4 / 3) * scipy.pi * (derived.a_ebr *
+    mpcoef.V_T = (4 / 3) * np.pi * (derived.a_ebr *
                                        egrid.nu / 2)**3  # volume of the wave function
     mpcoef.k1 = (mpcoef.V_T) * ((mpcoef.p**2) * mpder.omega *
-                                math.sqrt(2 * scipy.pi)) / (np.sqrt(mpcoef.p * mpcoef.Y))
+                                math.sqrt(2 * np.pi)) / (np.sqrt(mpcoef.p * mpcoef.Y))
     mpcoef.k2 = mpcoef.theta + mpcoef.Y - mpcoef.X * \
         math.cosh(mpcoef.theta) - np.log((1 + mpcoef.Y) / mpcoef.X)
     # recombination coefficients in m^3/s
@@ -166,5 +163,3 @@ def trap_state_mp(data):
         tsm.mp_sign = mpcoef.k[1, :][::-1]
         # hole capture coefficent from VB by acceptor
         tsm.mp_sigp = mpder.sa * mpcoef.k[0, :]
-
-
