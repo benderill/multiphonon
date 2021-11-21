@@ -11,11 +11,9 @@ def photon_energy(data):
         In photon energy grid all matrices are 2D. Along rows, ET remains fixed. along columns Ek remains fixed.
         Ept increases from left to right due to increase in Ek from left to right and increases from top to bottom due to increase of ET from top to bottom
     '''
-    phycon = data.root.physical_constants
-    derived = data.root.derived
-    mat = data.root.matrix
-    egrid = data.root.energy_grids
-    pgrid = data.root.photon_energy
+    mat = data.matrix
+    egrid = data.energy_grids
+    pgrid = data.photon_energy
 
     pgrid.Ept = ((np.zeros(mat.mat2D.shape) + egrid.Ek).T +
                  egrid.ET).T  # photon energy grid
@@ -26,12 +24,9 @@ def charge_states(data):
     '''
      In charge state grid, all matrices are 3D, formed by repeating the matrices of photon energy grid three times for three charge states. ET,Ek,deltaE and nu consist of three equal blocks. mu is -nu, 0 and nu for -ve, neutral and +ve charge state respectively.
     '''
-    phycon = data.root.physical_constants
-    derived = data.root.derived
-    egrid = data.root.energy_grids
-    mat = data.root.matrix
-    pgrid = data.root.photon_energy
-    cgrid = data.root.charge_states
+    mat = data.matrix
+    pgrid = data.photon_energy
+    cgrid = data.charge_states
 
     cgrid.mu = np.array(
         [-mat.nu2D, mat.nu2D*1e-6, mat.nu2D])  # mu is 3D matrix
@@ -42,10 +37,10 @@ def charge_states(data):
 
 
 def broadening_function(data):
-    hrf = data.root.huang_rhys_factor
-    phycon = data.root.physical_constants
-    inputs = data.root.inputs
-    bfunc = data.root.broadening_function
+    hrf = data.huang_rhys_factor
+    phycon = data.physical_constants
+    inputs = data.inputs
+    bfunc = data.broadening_function
 
     bfunc.fB = 1 / (scipy.exp((inputs.Eph * phycon.eVJ) /
                     (phycon.kB * inputs.T)) - 1)
@@ -63,14 +58,14 @@ def photoionization_cross_section(data):
     The cross section is weighted to the unoccupied states to get rid of the final state energy dependence
     The weighted p_crosssection is multiplied by the thermal velocity to get the coefficient
     '''
-    phycon = data.root.physical_constants
-    inputs = data.root.inputs
-    derived = data.root.derived
-    mat = data.root.matrix
-    cgrid = data.root.charge_states
-    pion = data.root.photoionization_cross_section
-    bfunc = data.root.broadening_function
-    wf = data.root.weighing_function
+    phycon = data.physical_constants
+    inputs = data.inputs
+    derived = data.derived
+    mat = data.matrix
+    cgrid = data.charge_states
+    pion = data.photoionization_cross_section
+    # bfunc = data.broadening_function
+    # wf = data.weighing_function
 
     # photoionization cross section (PCS)
     # constant part of PCS: PCS_C
@@ -118,14 +113,14 @@ def radiative_capture_cross_section(data):
     Capture cross section is found using eq 5.30 of QPC by BKR. Unit is [m^2].
     The photon wave cector q in eq 5.30 is found using eq. 5.72 by replacing the numerator with our photon energy Ept.
     '''
-    phycon = data.root.physical_constants
-    inputs = data.root.inputs
-    derived = data.root.derived
-    mat = data.root.matrix
-    cgrid = data.root.charge_states
-    pion = data.root.photoionization_cross_section
-    bfunc = data.root.broadening_function
-    rcapt = data.root.radiative_capture_cross_section
+    phycon = data.physical_constants
+    inputs = data.inputs
+    derived = data.derived
+    mat = data.matrix
+    cgrid = data.charge_states
+    pion = data.photoionization_cross_section
+    # bfunc = data.broadening_function
+    rcapt = data.radiative_capture_cross_section
 
     # capture cross section : CCS
 
@@ -147,12 +142,12 @@ def trap_state_rc(data):
     from the CB are always reversed.
     when the state is charged, the coefficent of capture is enhanced by coulomb factor / sommerfeld factor
     '''
-    inputs = data.root.inputs
-    rate = data.root.rate_of_capture
-    rcapt = data.root.radiative_capture_cross_section
-    pion = data.root.photoionization_cross_section
-    derived = data.root.derived
-    tsr = data.root.trap_state_rc
+    inputs = data.inputs
+    rate = data.rate_of_capture
+    rcapt = data.radiative_capture_cross_section
+    pion = data.photoionization_cross_section
+    derived = data.derived
+    tsr = data.trap_state_rc
 
     if inputs.trap_state == 'don':
         # electron capture coefficient from the CB by donar(initial charge state +ve)

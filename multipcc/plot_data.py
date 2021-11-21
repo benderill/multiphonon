@@ -4,8 +4,8 @@ import numpy as np
 
 
 def plot_nu(data):
-    egrid = data.root.energy_grids
-    hrf = data.root.huang_rhys_factor
+    egrid = data.energy_grids
+    hrf = data.huang_rhys_factor
     plt.xticks(np.arange(0, egrid.ET[-1], 0.1))
     plt.title('nu')
     plt.xlabel(r'Defect energy level $E_T$ [eV]')
@@ -17,8 +17,8 @@ def plot_nu(data):
 
 
 def plot_HRF(data):
-    egrid = data.root.energy_grids
-    hrf = data.root.huang_rhys_factor
+    egrid = data.energy_grids
+    hrf = data.huang_rhys_factor
     plt.xticks(np.arange(0, egrid.ET[-1], 0.1))
     plt.title(r'Huang Rhys Factor $S_{HR}$')
     plt.xlabel(r'Defect energy level $E_T$ [eV]')
@@ -32,10 +32,10 @@ def plot_HRF(data):
 
 
 def plot_radiative_capture_coefficients(data):
-    inputs = data.root.inputs
-    tsr = data.root.trap_state_rc
-    egrid = data.root.energy_grids
-    bfunc = data.root.broadening_function
+    inputs = data.inputs
+    tsr = data.trap_state_rc
+    egrid = data.energy_grids
+    bfunc = data.broadening_function
 
     plt.title('Radiative capture coefficients')
     plt.xticks(np.arange(0, egrid.ET[-1], 0.1))
@@ -48,8 +48,8 @@ def plot_radiative_capture_coefficients(data):
 
 
 def plot_multiphonon_capture_coefficients(data):
-    tsm = data.root.trap_state_mp
-    egrid = data.root.energy_grids
+    tsm = data.trap_state_mp
+    egrid = data.energy_grids
 
     # plt.ylim(1e-18,1e-3)
     plt.xticks(np.arange(0, egrid.ET[-1], 0.1))
@@ -63,8 +63,8 @@ def plot_multiphonon_capture_coefficients(data):
 
 
 def extrafactor(data):
-    rcapt = data.root.radiative_capture_cross_section
-    egrid = data.root.energy_grids
+    rcapt = data.radiative_capture_cross_section
+    egrid = data.energy_grids
 
     plt.title('Extra factor')
     plt.plot(egrid.ET, rcapt.extrafactor[0, :], label='neg')
@@ -75,8 +75,8 @@ def extrafactor(data):
 
 
 def twinx_rad(data):
-    egrid = data.root.energy_grids
-    ocp = data.root.occupation_probability
+    egrid = data.energy_grids
+    ocp = data.occupation_probability
     fig, ax1 = plt.subplots(figsize=(8, 6))
 
     # RADIATIVE CAPTURE
@@ -116,8 +116,8 @@ def twinx_rad(data):
 
 
 def twinx_mp(data):
-    egrid = data.root.energy_grids
-    ocp = data.root.occupation_probability
+    egrid = data.energy_grids
+    ocp = data.occupation_probability
     fig, ax1 = plt.subplots(figsize=(8, 6))
 
     # MULTIPHONON CAPTURE
@@ -158,8 +158,8 @@ def twinx_mp(data):
 
 
 def twinx_combined(data):
-    egrid = data.root.energy_grids
-    ocp = data.root.occupation_probability
+    egrid = data.energy_grids
+    ocp = data.occupation_probability
     fig, ax1 = plt.subplots(figsize=(8, 6))
     # COMBINED CAPTURE
 
@@ -200,8 +200,8 @@ def twinx_combined(data):
 
 
 def twinx_constant(data):
-    egrid = data.root.energy_grids
-    ocp = data.root.occupation_probability
+    egrid = data.energy_grids
+    ocp = data.occupation_probability
     fig, ax1 = plt.subplots(figsize=(8, 6))
 
     # CONSTANT CAPTURE COEFFICIENT
@@ -241,8 +241,8 @@ def twinx_constant(data):
 
 
 def plot_occupation_probability(data):
-    egrid = data.root.energy_grids
-    ocp = data.root.occupation_probability
+    egrid = data.energy_grids
+    ocp = data.occupation_probability
 
     plt.title('Trap occupation probability due to constant capture coefficient')
     plt.ylabel(r'Occupation probability $f_T$')
@@ -319,8 +319,8 @@ def plot_occupation_probability(data):
 
 
 def plot_recombination_efficiency(data):
-    egrid = data.root.energy_grids
-    ocp = data.root.occupation_probability
+    egrid = data.energy_grids
+    ocp = data.occupation_probability
 
     plt.title('Recombination effciency due to constant capture coefficient')
     plt.ylabel(r'recombination efficiency $\eta_R$ $[1/s]$')
@@ -400,8 +400,8 @@ def plot_recombination_efficiency(data):
 
 
 def plot_rate_SRH(data):
-    egrid = data.root.energy_grids
-    ocp = data.root.occupation_probability
+    egrid = data.energy_grids
+    ocp = data.occupation_probability
 
     plt.title('Rate of SRH recombination due to radiative capture')
     plt.ylabel(r'Rate of recombination $R_{SRH}$ $[cm^{-3}s^{-1}]$')

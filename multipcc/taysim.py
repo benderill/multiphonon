@@ -4,11 +4,10 @@ import scipy.constants
 
 
 def effective_density_of_states(data):
-    phycon = data.root.physical_constants
-    inputs = data.root.inputs
-    derived = data.root.derived
-    VB = data.root.bias_voltage
-    dos = data.root.effective_density_of_states
+    phycon = data.physical_constants
+    inputs = data.inputs
+    VB = data.bias_voltage
+    dos = data.effective_density_of_states
 
     # effective density of states in CB in [m^-3]
     dos.Nc = 2 * np.sqrt((2 * scipy.pi * inputs.M_eff * phycon.kB * inputs.T)**3) / (phycon.hbar * 2 * scipy.pi)**3  
@@ -21,15 +20,14 @@ def effective_density_of_states(data):
 
 
 def occupation_probability(data):
-    phycon = data.root.physical_constants
-    inputs = data.root.inputs
-    derived = data.root.derived
-    dos = data.root.effective_density_of_states
-    egrid = data.root.energy_grids
-    tsr = data.root.trap_state_rc
-    tsm = data.root.trap_state_mp
-    VB = data.root.bias_voltage
-    ocp = data.root.occupation_probability
+    phycon = data.physical_constants
+    inputs = data.inputs
+    dos = data.effective_density_of_states
+    egrid = data.energy_grids
+    tsr = data.trap_state_rc
+    tsm = data.trap_state_mp
+    VB = data.bias_voltage
+    ocp = data.occupation_probability
 
     # calculation of occupation probability, recombination efficiency and rate of recombination for simple SRH
 
@@ -124,8 +122,8 @@ def occupation_probability(data):
 
 
 def test(data):
-    ocp = data.root.occupation_probability
-    test = data.root.test
+    ocp = data.occupation_probability
+    test = data.test
 
     test.kn_m = ocp.kn_m[-1, :]
     test.kp_m = ocp.kp_m[-1, :]
@@ -144,8 +142,8 @@ def test(data):
 
 
 def eta_R_normalized(data):
-    ocp = data.root.occupation_probability
-    eta_nr = data.root.eta_R_normalized
+    ocp = data.occupation_probability
+    eta_nr = data.eta_R_normalized
 
     eta_nr.eta_R_s_max = np.amax(ocp.eta_R_s, axis=1)
     eta_nr.eta_R_s_norm = (ocp.eta_R_s.T / eta_nr.eta_R_s_max).T

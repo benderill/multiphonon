@@ -20,13 +20,14 @@ quad_vec = np.vectorize(quad)
 
 
 def derived_parameters(data):
-    phycon = data.root.physical_constants
-    inputs = data.root.inputs
-    derived = data.root.derived
-    mpder = data.root.multiphonon_derived_parameters
+    phycon = data.physical_constants
+    inputs = data.inputs
+    derived = data.derived
+    mpder = data.multiphonon_derived_parameters
 
     # radius of sphere with Brillouin zone volume in metre inverse
     mpder.q_D = cbrt(6*np.pi**2) / inputs.a_0
+    
     mpder.sa = 4 * math.sqrt(np.pi * derived.r_eh * phycon.eVJ / (phycon.kB * inputs.T))  # sommerfiled factor
     mpder.pekar = (1 / inputs.epsilon_h) - (1 / inputs.epsilon_l)  # pekar factor
     mpder.V_0 = (inputs.a_0)**3  # volume of the unit cell in cubic meters
@@ -34,12 +35,12 @@ def derived_parameters(data):
 
 
 def Huang_Rhys_Factor_deformation_potential_coupling(data):
-    phycon = data.root.physical_constants
-    inputs = data.root.inputs
-    derived = data.root.derived
-    mpder = data.root.multiphonon_derived_parameters
-    egrid = data.root.energy_grids
-    hrfd = data.root.deformation_potential_coupling
+    phycon = data.physical_constants
+    inputs = data.inputs
+    derived = data.derived
+    mpder = data.multiphonon_derived_parameters
+    egrid = data.energy_grids
+    hrfd = data.deformation_potential_coupling
 
     hrfd.SHRD = ((inputs.Dij * phycon.eVJ * 100) / (inputs.Eph * phycon.eVJ))**2 / \
         (2 * inputs.Mr * mpder.omega / phycon.hbar)  # deformation coupling
@@ -62,12 +63,12 @@ def Huang_Rhys_Factor_deformation_potential_coupling(data):
 
 
 def Huang_Rhys_Factor_polar_coupling(data):
-    phycon = data.root.physical_constants
-    inputs = data.root.inputs
-    derived = data.root.derived
-    mpder = data.root.multiphonon_derived_parameters
-    egrid = data.root.energy_grids
-    hrfp = data.root.polar_coupling
+    phycon = data.physical_constants
+    inputs = data.inputs
+    derived = data.derived
+    mpder = data.multiphonon_derived_parameters
+    egrid = data.energy_grids
+    hrfp = data.polar_coupling
 
     hrfp.SHRP = (3 / (2 * ((inputs.Eph * phycon.eVJ)**2))) * ((phycon.Qe**2) * (inputs.Mr / mpder.V_0)
                                                               * inputs.Eph * phycon.eVJ / (inputs.Mr * (mpder.q_D**2)) * mpder.pekar)  # polar coupling
@@ -90,11 +91,11 @@ def Huang_Rhys_Factor_polar_coupling(data):
 
 
 def Huang_Rhys_factor(data):
-    inputs = data.root.inputs
-    egrid = data.root.energy_grids
-    hrfd = data.root.deformation_potential_coupling
-    hrfp = data.root.polar_coupling
-    hrf = data.root.huang_rhys_factor
+    inputs = data.inputs
+    egrid = data.energy_grids
+    hrfd = data.deformation_potential_coupling
+    hrfp = data.polar_coupling
+    hrf = data.huang_rhys_factor
 
     # array of the three differnt values of mu depending on charge state. The value of mu for
     hrf.mu = np.array([-egrid.nu, egrid.nu*1e-6, egrid.nu])
@@ -112,13 +113,13 @@ def Huang_Rhys_factor(data):
 
 
 def multiphonon_capture_coefficients(data):
-    phycon = data.root.physical_constants
-    inputs = data.root.inputs
-    derived = data.root.derived
-    mpder = data.root.multiphonon_derived_parameters
-    egrid = data.root.energy_grids
-    hrf = data.root.huang_rhys_factor
-    mpcoef = data.root.multiphonon_capture_coefficients
+    phycon = data.physical_constants
+    inputs = data.inputs
+    derived = data.derived
+    mpder = data.multiphonon_derived_parameters
+    egrid = data.energy_grids
+    hrf = data.huang_rhys_factor
+    mpcoef = data.multiphonon_capture_coefficients
 
     mpcoef.theta = (inputs.Eph * phycon.eVJ) / (2 * phycon.kB * inputs.T)
     # round to next highest integer
@@ -147,10 +148,10 @@ def multiphonon_capture_coefficients(data):
 
 
 def trap_state_mp(data):
-    inputs = data.root.inputs
-    mpder = data.root.multiphonon_derived_parameters
-    mpcoef = data.root.multiphonon_capture_coefficients
-    tsm = data.root.trap_state_mp
+    inputs = data.inputs
+    mpder = data.multiphonon_derived_parameters
+    mpcoef = data.multiphonon_capture_coefficients
+    tsm = data.trap_state_mp
 
     if inputs.trap_state == 'don':
         # electron capture coefficient from the CB by donar [reversesed for the same reason as radiative]
