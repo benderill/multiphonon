@@ -2,17 +2,26 @@ from scipy.special import cbrt
 from scipy.special import gamma
 import matplotlib.pyplot as plt
 
-from multipcc import h5_wrapper,multiphonon, radiative_capture, plot_data, taysim
-from multipcc.utils import description, physical_constants, input_parameters, derived_parameters, bias_voltage, energy_grids, matrices
+from multipcc import h5_wrapper, multiphonon, radiative_capture, plot_data, taysim
+from multipcc.utils import (
+    description,
+    physical_constants,
+    input_parameters,
+    derived_parameters,
+    bias_voltage,
+    energy_grids,
+    matrices,
+)
 
-# Warning: input_peros is an example it is nolonger imported as a module, check the main clause for import 
+# Warning: input_peros is an example it is nolonger imported as a module, check the main clause for import
+
 
 def main(data, obj, output):
     data.root.description.current_simulation = description()
     data.root.physical_constants = physical_constants()
     inputs = input_parameters(obj)
     derived = derived_parameters(inputs)
-    data.root.inputs = inputs 
+    data.root.inputs = inputs
     data.root.derived = derived
 
     start, stop, step = inputs.V_start, inputs.V_stop, inputs.dV
@@ -60,10 +69,11 @@ def main(data, obj, output):
 if __name__ == "__main__":
     import json
     from addict import Dict
-    with open('MAPI.json', 'r') as json_file:
-        input_peros= json.load(json_file)
+
+    with open("MAPI.json", "r") as json_file:
+        input_peros = json.load(json_file)
     input_peros = Dict(input_peros)
     data = h5_wrapper.H5()
     data.filename = "Peros_knkp=1.h5"
-    with open('output.txt', 'w+') as output:
+    with open("output.txt", "w+") as output:
         main(data, input_peros, output)
