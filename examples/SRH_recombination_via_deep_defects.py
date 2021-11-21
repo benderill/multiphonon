@@ -1,18 +1,24 @@
 from scipy.special import cbrt
 from scipy.special import gamma
 import matplotlib.pyplot as plt
-from multipcc import h5_wrapper , description  , physical_constants , input_data , bias_voltage , taysim , mesh , coulomb_factor , weighing_function , radiative_capture , multiphonon , plot_data
+
+from multipcc import h5_wrapper,multiphonon, radiative_capture, plot_data, taysim
+from multipcc.utils import description, physical_constants, input_parameters, derived_parameters, bias_voltage, energy_grids, matrices
 
 # Warning: input_peros is an example it is nolonger imported as a module, check the main clause for import 
 
 def main(data, obj, output):
-    description.desciption(data)
-    physical_constants.physical_constants(data)
-    input_data.input_parameters(data, obj)
-    input_data.derived_parameters(data)
-    bias_voltage.bias_voltage(data)
-    mesh.energy_grids(data)
-    mesh.matrices(data)
+    data.root.description.current_simulation = description()
+    data.root.physical_constants = physical_constants()
+    inputs = input_parameters(obj)
+    derived = derived_parameters(inputs)
+    data.root.inputs = inputs 
+    data.root.derived = derived
+
+    start, stop, step = inputs.V_start, inputs.V_stop, inputs.dV
+    data.root.bias_voltage = bias_voltage(start, stop, step)
+    data.root.energy_grids = energy_grids(inputs, derived)
+    data.root.matrix = matrices(inputs, data.root.energy_grids)
 
     # calculation of capture cross section and capture coefficients due to multiphonon capture
     multiphonon.derived_parameters(data)
