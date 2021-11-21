@@ -135,3 +135,4 @@ dmypy.json
 *.ipynb
 .DS_Store
 *.pdf
+*.h5
