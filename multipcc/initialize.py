@@ -21,32 +21,32 @@ class Initialize():
 
     def physical_constants(self):
         # eV to Joule conversion factor
-        self.data.physical_constants.amu_kg, _, _ = sc.physical_constants[
-            'atomic mass unit-kilogram relationship']
+        self.data.physical_constants.amu_kg = sc.physical_constants[
+            'atomic mass unit-kilogram relationship'][0]
         # eV to Joule conversion factor
-        self.data.physical_constants.eVJ, _, _ = sc.physical_constants[
-            'electron volt-joule relationship']
+        self.data.physical_constants.eVJ = sc.physical_constants[
+            'electron volt-joule relationship'][0]
         # Bohr Radius in m
-        self.data.physical_constants.a_br, _, _ = sc.physical_constants['Bohr radius']
+        self.data.physical_constants.a_br = sc.physical_constants['Bohr radius'][0]
         # Rydberg constant in eV
-        self.data.physical_constants.r_h, _, _ = sc.physical_constants[
-            'Rydberg constant times hc in eV']
+        self.data.physical_constants.r_h = sc.physical_constants[
+            'Rydberg constant times hc in eV'][0]
         # planck constant over 2pi in Js
-        self.data.physical_constants.hbar, _, _ = sc.physical_constants[
-            'Planck constant over 2 pi']
+        self.data.physical_constants.hbar = sc.physical_constants[
+            'Planck constant over 2 pi'][0]
         # planck constant in Js
-        self.data.physical_constants.hplanck, _, _ = sc.physical_constants['Planck constant']
+        self.data.physical_constants.hplanck = sc.physical_constants['Planck constant'][0]
         # charge of one electron
-        self.data.physical_constants.Qe, _, _ = sc.physical_constants['elementary charge']
+        self.data.physical_constants.Qe = sc.physical_constants['elementary charge'][0]
         # electron mass in kg
-        self.data.physical_constants.m_e, _, _ = sc.physical_constants['electron mass']
+        self.data.physical_constants.m_e = sc.physical_constants['electron mass'][0]
         # boltzmann constant in JK^-1
-        self.data.physical_constants.kB, _, _ = sc.physical_constants['Boltzmann constant']
+        self.data.physical_constants.kB = sc.physical_constants['Boltzmann constant'][0]
         # dimensionless
-        self.data.physical_constants.alpha, _, _ = sc.physical_constants[
-            'fine-structure constant']
+        self.data.physical_constants.alpha = sc.physical_constants[
+            'fine-structure constant'][0]
         # speed of light in vacuum in m/s
-        self.data.physical_constants.c, _, _ = sc.physical_constants['speed of light in vacuum']
+        self.data.physical_constants.c = sc.physical_constants['speed of light in vacuum'][0]
         self.data.physical_constants.eps_0 = 8.85418782E-12  # in F/m
 
         return self.data.physical_constants
