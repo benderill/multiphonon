@@ -1,20 +1,27 @@
 from addict import Dict
 import numpy as np
 import scipy.constants as sc
+import json
 
 
 class Initialize():
-    def __init__(self, inputs=None):
+    def __init__(self, input=None):
         ''' Initialize the class.
         TODO: write a validater function for the input parameters.
         '''
         self.data = Dict()
         self.data.filename = 'default.h5'
         self.data.description = 'Case 3: Directly calculate the radiative capture cross section by putting the photon density of states as 1/(2pi^2)((hbar omega)^2/(hbar c/eta_R)^3).'
-        self.data.inputs = inputs
-        if inputs is not None:
+
+        if type(input) is str:
+            try:
+                with open(input, 'r') as json_file:
+                    inp_data = json.load(json_file)
+                    self.data.inputs = Dict(inp_data)
+            except FileNotFoundError:
+                print("File does not exist")
             self.physical_constants()
-            self.modify_input_parameters()
+            self.set_input_parameters()
             self.derived_parameters()
             self.energy_grids()
             self.matrices()
@@ -51,7 +58,7 @@ class Initialize():
 
         return self.data.physical_constants
 
-    def modify_input_parameters(self):
+    def set_input_parameters(self):
         # self.data.inputs.mat = obj.mat  # Material Name (string)
         # self.data.inputs.T = obj.T  # Temperature in kelvin (float)
         # self.data.inputs.a_0 = obj.a_0 * cbrt(1/4) * 1E-10           #(1/4)^(1/3) of lattice constant in meters ( for face centered unit cell)
