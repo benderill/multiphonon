@@ -2,12 +2,13 @@ from addict import Dict
 import numpy as np
 import scipy.constants as sc
 import json
-
+from multipcc.utils import h5_load, h5_save
 
 class Initialize():
     def __init__(self, input=None):
         ''' Initialize the class.
         TODO: write a validater function for the input parameters.
+        TODO: load and save methods for the data
         '''
         self.data = Dict()
         self.data.filename = 'default.h5'
@@ -151,3 +152,15 @@ class Initialize():
         self.data.matrix.nu3D = np.tile(self.data.matrix.nu2D, (3, 1)).reshape(
             3, et.size, ek.size)  # 3D matrix of nu [3 x ET x Ek]
         return self.data.matrix
+    
+    def load(self):
+        if self.data.filename is not None:
+            self.data = h5_load(self.data.filename)
+        else:
+            print('Filename must be set before load can be used')
+
+    def save(self):
+        if self.data.filename is not None:
+            h5_save(self.data.filename, self.data)
+        else:
+            print("Filename must be set before save can be used")
