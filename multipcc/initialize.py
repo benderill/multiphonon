@@ -22,7 +22,7 @@ class Initialize:
                     self.data.inputs = Dict(inp_data)
             except FileNotFoundError:
                 print("File does not exist")
-            self.physical_constants()
+            self.set_physical_constants()
             self.set_input_parameters()
             self.set_derived_parameters()
             self.set_energy_grids()
