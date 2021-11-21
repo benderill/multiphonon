@@ -24,11 +24,11 @@ class Initialize:
                 print("File does not exist")
             self.physical_constants()
             self.set_input_parameters()
-            self.derived_parameters()
-            self.energy_grids()
-            self.matrices()
+            self.set_derived_parameters()
+            self.set_energy_grids()
+            self.set_matrices()
 
-    def physical_constants(self):
+    def set_physical_constants(self):
         # eV to Joule conversion factor
         self.data.physical_constants.amu_kg = sc.physical_constants[
             "atomic mass unit-kilogram relationship"
@@ -69,6 +69,9 @@ class Initialize:
 
         return self.data.physical_constants
 
+    def get_physical_constants(self):
+        return self.data.physical_constants
+
     def set_input_parameters(self):
         # self.data.inputs.mat = obj.mat  # Material Name (string)
         # self.data.inputs.T = obj.T  # Temperature in kelvin (float)
@@ -100,9 +103,10 @@ class Initialize:
         # self.data.inputs.dE = obj.dE  # step size for final energy mesh
         # self.data.inputs.dir = obj.dir  # multiphonon coupling type
 
+    def get_input_parameters(self):
         return self.data.inputs
 
-    def derived_parameters(self):
+    def set_derived_parameters(self):
         """
         Parameters that are derived from the input parameters.
         """
@@ -130,9 +134,10 @@ class Initialize:
             / (self.data.physical_constants.kB * self.data.inputs.T)
         )
 
+    def get_derived_parameters(self):
         return self.data.derived
 
-    def energy_grids(self):
+    def set_energy_grids(self):
         # Distance of the defect from the band(the energy grids are so chosen to get the right nu)
         self.data.energy_grids.ET = np.linspace(
             4 * self.data.derived.r_eh,
@@ -166,9 +171,10 @@ class Initialize:
             / self.data.physical_constants.hbar ** 2
         )
 
+    def get_energy_grids(self):
         return self.data.energy_grids
 
-    def matrices(self):
+    def set_matrices(self):
         et = self.data.energy_grids.ET
         ek = self.data.energy_grids.Ek
         self.data.matrix.mat2D = np.zeros([et.size, ek.size])  # xy
@@ -190,6 +196,8 @@ class Initialize:
         self.data.matrix.nu3D = np.tile(self.data.matrix.nu2D, (3, 1)).reshape(
             3, et.size, ek.size
         )  # 3D matrix of nu [3 x ET x Ek]
+
+    def get_matrices(self):
         return self.data.matrix
 
     def load(self):
