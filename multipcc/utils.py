@@ -23,14 +23,14 @@ def bias_voltage(start, stop, step):
 
 
 def coulomb_factor(data):
-    derived = data.derived
+    parameters = data.parameters
     egrid = data.energy_grids
     mat = data.matrix
     cf = data.coulomb_factor
 
     cf.CF_pos = np.zeros(mat.mat2D.shape)
     cf.CF_neg = np.zeros(mat.mat2D.shape)
-    cf.X = np.sqrt(derived.r_eh / egrid.Ek)
+    cf.X = np.sqrt(parameters.r_eh / egrid.Ek)
     cf.CF_pos = (2 * sc.pi * np.sqrt(cf.X)) / (1 - np.exp(-2 * sc.pi * cf.X))
     cf.CF_pos = np.broadcast_to(cf.CF_pos, (egrid.ET.size, egrid.Ek.size))
     cf.a = np.exp(-2 * sc.pi * cf.X)
@@ -43,26 +43,26 @@ def coulomb_factor(data):
     cf.unity = np.ones(mat.mat2D.shape)
     cf.CF3D = np.array([cf.unity, cf.unity, cf.unity])
 
-    cf.K = 2 * sc.pi * np.sqrt(derived.r_eh / egrid.Ek)
+    cf.K = 2 * sc.pi * np.sqrt(parameters.r_eh / egrid.Ek)
 
 
 def w_function(data, arg, axis):
     const = data.constants
-    inputs = data.inputs
+    parameters = data.parameters
     mat = data.matrix
     wf = data.weighing_function
 
     wf.Gc = (
         (8 * np.sqrt(2) * sc.pi / const.hplanck ** 3)
-        * np.sqrt(inputs.M_eff) ** 3
-        * np.sqrt((mat.Ec - inputs.Eg) * const.eVJ)
+        * np.sqrt(parameters.M_eff) ** 3
+        * np.sqrt((mat.Ec - parameters.Eg) * const.eVJ)
     )  # DOS
     wf.fE = np.exp(
-        (inputs.Eg / 2 - mat.Ec) * const.eVJ / (const.kB * inputs.T)
+        (parameters.Eg / 2 - mat.Ec) * const.eVJ / (const.kB * parameters.T)
     )  # fermidirac fucntion
 
     # carrier density per volume per energy
-    wf.pear = wf.Gc * wf.fE * inputs.dE * const.eVJ
+    wf.pear = wf.Gc * wf.fE * parameters.dE * const.eVJ
 
     # function weighted to occupied states
     wf.weighted_numerator = (arg * wf.pear).sum(axis=axis)
@@ -74,21 +74,21 @@ def w_function(data, arg, axis):
 
 def w_function_2(data, arg, axis):
     const = data.constants
-    inputs = data.inputs
+    parameters = data.parameters
     mat = data.matrix
     wf2 = data.weighing_function
 
     wf2.Gc = (
         (8 * np.sqrt(2) * sc.pi / const.hplanck ** 3)
-        * np.sqrt(inputs.M_eff) ** 3
-        * np.sqrt((mat.Ec - inputs.Eg) * const.eVJ)
+        * np.sqrt(parameters.M_eff) ** 3
+        * np.sqrt((mat.Ec - parameters.Eg) * const.eVJ)
     )  # DOS
     wf2.fE = np.exp(
-        (inputs.Eg / 2 - mat.Ec) * const.eVJ / (const.kB * inputs.T)
+        (parameters.Eg / 2 - mat.Ec) * const.eVJ / (const.kB * parameters.T)
     )  # fermidirac fucntion
 
     # no of empty states per volume per energy
-    wf2.pear = wf2.Gc * (1 - wf2.fE) * inputs.dE * const.eVJ
+    wf2.pear = wf2.Gc * (1 - wf2.fE) * parameters.dE * const.eVJ
 
     # function weighted to unoccupied states
     wf2.weighted_numerator = (arg * wf2.pear).sum(axis=axis)
