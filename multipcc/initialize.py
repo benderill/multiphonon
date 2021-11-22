@@ -14,14 +14,18 @@ class Initialize:
         self.data = Dict()
         self.data.filename = "default.h5"
         self.data.description = "Case 3: Directly calculate the radiative capture cross section by putting the photon density of states as 1/(2pi^2)((hbar omega)^2/(hbar c/eta_R)^3)."
+        self.isinput = False
 
         if type(input) is str:
             try:
                 with open(input, "r") as json_file:
                     inp_data = json.load(json_file)
                     self.data.inputs = Dict(inp_data)
+                    self.isinput = True
             except FileNotFoundError:
                 print("File does not exist")
+
+        if self.isinput:
             self.set_physical_constants()
             self.set_input_parameters()
             self.set_derived_parameters()
