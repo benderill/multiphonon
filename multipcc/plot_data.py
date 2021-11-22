@@ -483,7 +483,7 @@ def plot_rate_SRH(data):
 
 if __name__ == "__main__":
     data = Initialize()
-    data.filename = "C:/Users/basit/Simulations_and_results/Data/Paper1/SRH_deep_defects/Peros_Case_3.h5"
+    data.filename = "test.h5"
     data.load()
     twinx_mp(data)
 
