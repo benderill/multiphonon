@@ -1,6 +1,5 @@
 import math
 import numpy as np
-import scipy.constants
 
 
 def effective_density_of_states(data):
@@ -12,8 +11,8 @@ def effective_density_of_states(data):
     # effective density of states in CB in [m^-3]
     dos.Nc = (
         2
-        * np.sqrt((2 * scipy.pi * inputs.M_eff * phycon.kB * inputs.T) ** 3)
-        / (phycon.hbar * 2 * scipy.pi) ** 3
+        * np.sqrt((2 * np.pi * inputs.M_eff * phycon.kB * inputs.T) ** 3)
+        / (phycon.hbar * 2 * np.pi) ** 3
     )
     dos.Nv = dos.Nc
     # intrinsic carrier concentration per m^3 [units m^-3]
