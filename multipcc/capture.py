@@ -55,7 +55,6 @@ class Multiphonon:
         ) ** 2 / (
             2 * inputs.Mr * mpder.omega / phycon.hbar
         )  # deformation coupling
-        print(hrfd.SHRD)
         # array of the three differnt values of mu depending on charge state. The value of mu for
         hrfd.mu = np.array([-egrid.nu, egrid.nu * 1e-6, egrid.nu])
         # neutral charge state was supposed to be zero but has been given a small value to avoid
@@ -87,7 +86,6 @@ class Multiphonon:
             / (inputs.Mr * (mpder.q_D ** 2))
             * mpder.pekar
         )  # polar coupling
-        print(hrfp.SHRP)
         # array of the three differnt values of mu depending on charge state. The value of mu for
         hrfp.mu = np.array([-egrid.nu, egrid.nu * 1e-6, egrid.nu])
         # neutral charge state was supposed to be zero but has been given a small value to avoid
