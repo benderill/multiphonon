@@ -8,16 +8,12 @@ from scipy.special import iv
 from multipcc.utils import w_function, w_function_2
 
 
-def integrand(x, a, b, c):  # integration I(a,b,c)
-    return ((x ** a) * (np.sin(b * np.arctan(c * x)) ** 2)) / ((1 + (c * x) ** 2) ** b)
-
-
+integrand = lambda x, a, b, c: ((x ** a) * (np.sin(b * np.arctan(c * x)) ** 2)) / (
+    (1 + (c * x) ** 2) ** b
+)
 integrand_vec = np.vectorize(integrand)
 
-
-def quad(func, a, b, c):
-    return scipy.integrate.quad(func, 0, 1, (a, b, c))
-
+quad = lambda func, a, b, c: scipy.integrate.quad(func, 0, 1, (a, b, c))
 
 quad_vec = np.vectorize(quad)
 
@@ -73,8 +69,7 @@ class Multiphonon:
         hrfd.I = hrfd.ans / hrfd.bcsqre
         # final values of Huang Rhys Factor. SHR is an array of size mu x Et. Each coloumn contains the
         hrfd.SHR_D = hrfd.SHRD * hrfd.I
-        # values of SHR for every possible value of energy for a particula
-        # r charge state
+        # values of SHR for every possible value of energy for a particular charge state
 
     def Huang_Rhys_Factor_polar_coupling(self):
         phycon = self.data.physical_constants
