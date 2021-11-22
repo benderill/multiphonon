@@ -26,13 +26,13 @@ class Initialize:
                 print("File does not exist")
 
         if self.isinput:
-            self.set_physical_constants()
+            self.set_constants()
             self.set_input_parameters()
             self.set_derived_parameters()
             self.set_energy_grids()
             self.set_matrices()
 
-    def set_physical_constants(self):
+    def set_constants(self):
         # eV to Joule conversion factor
         self.data.constants.amu_kg = sc.physical_constants[
             "atomic mass unit-kilogram relationship"
@@ -65,10 +65,13 @@ class Initialize:
 
         return self.data.constants
 
-    def get_physical_constants(self):
+    def get_constants(self):
         return self.data.constants
 
     def set_input_parameters(self):
+        """
+        TODO: input validation
+        """
         # self.data.inputs.material = obj.mat  # Material Name (string)
         # self.data.inputs.T = obj.T  # Temperature in kelvin (float)
         # self.data.inputs.a_0 = obj.a_0 * cbrt(1/4) * 1E-10           #(1/4)^(1/3) of lattice constant in meters ( for face centered unit cell)
