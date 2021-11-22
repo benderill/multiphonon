@@ -28,7 +28,7 @@ class Multiphonon:
         self.data = data
 
     def derived_parameters(self):
-        phycon = self.data.physical_constants
+        const = self.data.constants
         inputs = self.data.inputs
         derived = self.data.derived
         mpder = self.data.multiphonon_derived_parameters
@@ -37,24 +37,22 @@ class Multiphonon:
         mpder.q_D = cbrt(6 * np.pi ** 2) / inputs.a_0
 
         mpder.sa = 4 * math.sqrt(
-            np.pi * derived.r_eh * phycon.eVJ / (phycon.kB * inputs.T)
+            np.pi * derived.r_eh * const.eVJ / (const.kB * inputs.T)
         )  # sommerfiled factor
         mpder.pekar = (1 / inputs.epsilon_h) - (1 / inputs.epsilon_l)  # pekar factor
         mpder.V_0 = (inputs.a_0) ** 3  # volume of the unit cell in cubic meters
-        mpder.omega = (inputs.Eph * phycon.eVJ) / phycon.hbar  # frequecy of the phonon
+        mpder.omega = (inputs.Eph * const.eVJ) / const.hbar  # frequecy of the phonon
 
     def Huang_Rhys_Factor_deformation_potential_coupling(self):
-        phycon = self.data.physical_constants
+        const = self.data.constants
         inputs = self.data.inputs
         derived = self.data.derived
         mpder = self.data.multiphonon_derived_parameters
         egrid = self.data.energy_grids
         hrfd = self.data.deformation_potential_coupling
 
-        hrfd.SHRD = (
-            (inputs.Dij * phycon.eVJ * 100) / (inputs.Eph * phycon.eVJ)
-        ) ** 2 / (
-            2 * inputs.Mr * mpder.omega / phycon.hbar
+        hrfd.SHRD = ((inputs.Dij * const.eVJ * 100) / (inputs.Eph * const.eVJ)) ** 2 / (
+            2 * inputs.Mr * mpder.omega / const.hbar
         )  # deformation coupling
         # array of the three differnt values of mu depending on charge state. The value of mu for
         hrfd.mu = np.array([-egrid.nu, egrid.nu * 1e-6, egrid.nu])
@@ -72,18 +70,18 @@ class Multiphonon:
         # values of SHR for every possible value of energy for a particular charge state
 
     def Huang_Rhys_Factor_polar_coupling(self):
-        phycon = self.data.physical_constants
+        const = self.data.constants
         inputs = self.data.inputs
         derived = self.data.derived
         mpder = self.data.multiphonon_derived_parameters
         egrid = self.data.energy_grids
         hrfp = self.data.polar_coupling
 
-        hrfp.SHRP = (3 / (2 * ((inputs.Eph * phycon.eVJ) ** 2))) * (
-            (phycon.Qe ** 2)
+        hrfp.SHRP = (3 / (2 * ((inputs.Eph * const.eVJ) ** 2))) * (
+            (const.Qe ** 2)
             * (inputs.Mr / mpder.V_0)
             * inputs.Eph
-            * phycon.eVJ
+            * const.eVJ
             / (inputs.Mr * (mpder.q_D ** 2))
             * mpder.pekar
         )  # polar coupling
@@ -125,7 +123,7 @@ class Multiphonon:
             print("Please select Multiphonon coupling potential")
 
     def multiphonon_capture_coefficients(self):
-        phycon = self.data.physical_constants
+        const = self.data.constants
         inputs = self.data.inputs
         derived = self.data.derived
         mpder = self.data.multiphonon_derived_parameters
@@ -133,7 +131,7 @@ class Multiphonon:
         hrf = self.data.huang_rhys_factor
         mpcoef = self.data.multiphonon_capture_coefficients
 
-        mpcoef.theta = (inputs.Eph * phycon.eVJ) / (2 * phycon.kB * inputs.T)
+        mpcoef.theta = (inputs.Eph * const.eVJ) / (2 * const.kB * inputs.T)
         # round to next highest integer
         mpcoef.p = np.ceil(egrid.ET / inputs.Eph)
         mpcoef.p_vec = np.ones(hrf.mu.shape) * mpcoef.p  # matching the shape of mu
@@ -220,17 +218,15 @@ class Radiative:
 
     def broadening_function(self):
         hrf = self.data.huang_rhys_factor
-        phycon = self.data.physical_constants
+        const = self.data.constants
         inputs = self.data.inputs
         bfunc = self.data.broadening_function
 
-        bfunc.fB = 1 / (
-            scipy.exp((inputs.Eph * phycon.eVJ) / (phycon.kB * inputs.T)) - 1
-        )
+        bfunc.fB = 1 / (scipy.exp((inputs.Eph * const.eVJ) / (const.kB * inputs.T)) - 1)
         bfunc.bessel = iv(hrf.SHR, 2 * hrf.SHR * scipy.sqrt(bfunc.fB * (bfunc.fB + 1)))
         bfunc.broadening = (
             scipy.exp(-2 * hrf.SHR * (bfunc.fB + 1))
-            * scipy.exp(hrf.SHR * inputs.Eph * phycon.eVJ / (phycon.kB * inputs.T))
+            * scipy.exp(hrf.SHR * inputs.Eph * const.eVJ / (const.kB * inputs.T))
             * bfunc.bessel
         )
 
@@ -242,7 +238,7 @@ class Radiative:
         The cross section is weighted to the unoccupied states to get rid of the final state energy dependence
         The weighted p_crosssection is multiplied by the thermal velocity to get the coefficient
         """
-        phycon = self.data.physical_constants
+        const = self.data.constants
         inputs = self.data.inputs
         derived = self.data.derived
         mat = self.data.matrix
@@ -258,21 +254,21 @@ class Radiative:
 
         pion.PCS_C = (
             (16 / 3)
-            * phycon.alpha
-            * phycon.a_br ** 2
-            * phycon.r_h
-            * phycon.eVJ
+            * const.alpha
+            * const.a_br ** 2
+            * const.r_h
+            * const.eVJ
             * (1 / derived.eta_r)
-            * (phycon.m_e / inputs.M_eff)
+            * (const.m_e / inputs.M_eff)
             * (2 * scipy.pi)
-            * (np.sqrt(2 * inputs.M_eff) / phycon.hbar) ** 3
+            * (np.sqrt(2 * inputs.M_eff) / const.hbar) ** 3
         )
         pion.Gamma = (gamma(cgrid.mu + 1)) ** 2 / gamma(2 * cgrid.mu + 1)
         pion.PCS_vMu = (
             (2 ** (2 * cgrid.mu)) * pion.Gamma * (mat.nu3D * derived.a_ebr) ** 3
         )
         pion.PCS_vE = (
-            (np.sqrt(mat.Ek3D * phycon.eVJ)) ** 3 / (cgrid.Ept * phycon.eVJ)
+            (np.sqrt(mat.Ek3D * const.eVJ)) ** 3 / (cgrid.Ept * const.eVJ)
         ) * (
             (np.sin((cgrid.mu + 1) * np.arctan(np.sqrt(cgrid.theta)))) ** 2
             / (cgrid.theta * (1 + cgrid.theta) ** (cgrid.mu + 1))
@@ -287,19 +283,19 @@ class Radiative:
         pion.PCoeff = pion.PCS * inputs.v_th  # photoionization coefficient
 
         pion.sa = 4 * math.sqrt(
-            scipy.pi * derived.r_eh * phycon.eVJ / (phycon.kB * inputs.T)
+            scipy.pi * derived.r_eh * const.eVJ / (const.kB * inputs.T)
         )  # sommerfiled factor
 
         pion.sigma_k_c = (
             (16 / 3)
-            * phycon.alpha
-            * phycon.a_br ** 2
-            * phycon.r_h
-            * phycon.eVJ
+            * const.alpha
+            * const.a_br ** 2
+            * const.r_h
+            * const.eVJ
             * (1 / derived.eta_r)
-            * (phycon.m_e / inputs.M_eff)
+            * (const.m_e / inputs.M_eff)
             * (2 * scipy.pi)
-            / (phycon.hbar * phycon.c / derived.eta_r) ** 3
+            / (const.hbar * const.c / derived.eta_r) ** 3
         )
         pion.sigma_k_gamma = (gamma(cgrid.mu + 1)) ** 2 / gamma(2 * cgrid.mu + 1)
         pion.sigma_k_mu = (
@@ -307,9 +303,9 @@ class Radiative:
         )
         pion.sigma_k_E = (
             mat.Ek3D
-            * phycon.eVJ
-            * (cgrid.Ept * phycon.eVJ) ** 2
-            / (cgrid.Ept * phycon.eVJ)
+            * const.eVJ
+            * (cgrid.Ept * const.eVJ) ** 2
+            / (cgrid.Ept * const.eVJ)
         ) * (
             (np.sin((cgrid.mu + 1) * np.arctan(np.sqrt(cgrid.theta)))) ** 2
             / (cgrid.theta * (1 + cgrid.theta) ** (cgrid.mu + 1))
@@ -324,7 +320,7 @@ class Radiative:
         Capture cross section is found using eq 5.30 of QPC by BKR. Unit is [m^2].
         The photon wave cector q in eq 5.30 is found using eq. 5.72 by replacing the numerator with our photon energy Ept.
         """
-        phycon = self.data.physical_constants
+        const = self.data.constants
         inputs = self.data.inputs
         derived = self.data.derived
         mat = self.data.matrix
@@ -335,8 +331,8 @@ class Radiative:
 
         # capture cross section : CCS
 
-        rcapt.factor = (cgrid.Ept * phycon.eVJ) ** 2 / (
-            2 * inputs.M_eff * (phycon.c / derived.eta_r) ** 2 * mat.Ek3D * phycon.eVJ
+        rcapt.factor = (cgrid.Ept * const.eVJ) ** 2 / (
+            2 * inputs.M_eff * (const.c / derived.eta_r) ** 2 * mat.Ek3D * const.eVJ
         )  # DIMENSIONLESS
         rcapt.CCS_E = rcapt.factor * pion.PCS_E
         # capture cross section before weighing or summation overEk

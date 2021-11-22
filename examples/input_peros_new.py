@@ -1,6 +1,6 @@
 material = "MAPI"  # (mat)
 temperature = 300  # (T) Temperature in K
-lattice_constant = {"a0": 6.3}  # (a_0) lattice constant in Angstrome
+lattice_constant = 6.3  # (a_0) lattice constant in Angstrome
 bandgap = 1.6  # (Eg) bandgap in eV
 # relative permittivity at low frequency # relative permittivity at high frequency
 relative_permittivity = {

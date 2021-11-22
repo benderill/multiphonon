@@ -47,22 +47,22 @@ def coulomb_factor(data):
 
 
 def w_function(data, arg, axis):
-    phycon = data.physical_constants
+    const = data.constants
     inputs = data.inputs
     mat = data.matrix
     wf = data.weighing_function
 
     wf.Gc = (
-        (8 * np.sqrt(2) * sc.pi / phycon.hplanck ** 3)
+        (8 * np.sqrt(2) * sc.pi / const.hplanck ** 3)
         * np.sqrt(inputs.M_eff) ** 3
-        * np.sqrt((mat.Ec - inputs.Eg) * phycon.eVJ)
+        * np.sqrt((mat.Ec - inputs.Eg) * const.eVJ)
     )  # DOS
     wf.fE = np.exp(
-        (inputs.Eg / 2 - mat.Ec) * phycon.eVJ / (phycon.kB * inputs.T)
+        (inputs.Eg / 2 - mat.Ec) * const.eVJ / (const.kB * inputs.T)
     )  # fermidirac fucntion
 
     # carrier density per volume per energy
-    wf.pear = wf.Gc * wf.fE * inputs.dE * phycon.eVJ
+    wf.pear = wf.Gc * wf.fE * inputs.dE * const.eVJ
 
     # function weighted to occupied states
     wf.weighted_numerator = (arg * wf.pear).sum(axis=axis)
@@ -73,22 +73,22 @@ def w_function(data, arg, axis):
 
 
 def w_function_2(data, arg, axis):
-    phycon = data.physical_constants
+    const = data.constants
     inputs = data.inputs
     mat = data.matrix
     wf2 = data.weighing_function
 
     wf2.Gc = (
-        (8 * np.sqrt(2) * sc.pi / phycon.hplanck ** 3)
+        (8 * np.sqrt(2) * sc.pi / const.hplanck ** 3)
         * np.sqrt(inputs.M_eff) ** 3
-        * np.sqrt((mat.Ec - inputs.Eg) * phycon.eVJ)
+        * np.sqrt((mat.Ec - inputs.Eg) * const.eVJ)
     )  # DOS
     wf2.fE = np.exp(
-        (inputs.Eg / 2 - mat.Ec) * phycon.eVJ / (phycon.kB * inputs.T)
+        (inputs.Eg / 2 - mat.Ec) * const.eVJ / (const.kB * inputs.T)
     )  # fermidirac fucntion
 
     # no of empty states per volume per energy
-    wf2.pear = wf2.Gc * (1 - wf2.fE) * inputs.dE * phycon.eVJ
+    wf2.pear = wf2.Gc * (1 - wf2.fE) * inputs.dE * const.eVJ
 
     # function weighted to unoccupied states
     wf2.weighted_numerator = (arg * wf2.pear).sum(axis=axis)
