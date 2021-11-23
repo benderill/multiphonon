@@ -219,10 +219,10 @@ class Initialize:
         if self.data.filename is not None:
             self.data = h5_load(self.data.filename)
         else:
-            print("Filename must be set before load can be used")
+            print("File name must be set before load can be used")
 
     def save(self):
         if self.data.filename is not None:
             h5_save(self.data.filename, self.data)
         else:
-            print("Filename must be set before save can be used")
+            print("File name must be set before save can be used")
