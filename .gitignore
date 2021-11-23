@@ -127,3 +127,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# additional files created by the build environment
+.vs/
+*.pyproj
+*.sln 
+*.ipynb
+.DS_Store
+*.pdf
+*.h5
