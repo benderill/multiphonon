@@ -7,7 +7,7 @@ class TaylorSimmons:
     Taylor-Simmons model
     """
 
-    def __inti__(self, data):
+    def __init__(self, data):
         self.data = data
 
     def effective_density_of_states(self):
