@@ -33,10 +33,8 @@ def plot_HRF(data):
 
 
 def plot_radiative_capture_coefficients(data):
-    inputs = data.inputs
     tsr = data.trap_state_rc
     egrid = data.energy_grids
-    bfunc = data.broadening_function
 
     plt.title("Radiative capture coefficients")
     plt.xticks(np.arange(0, egrid.ET[-1], 0.1))
