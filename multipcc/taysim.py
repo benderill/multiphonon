@@ -4,27 +4,29 @@ import numpy as np
 
 def effective_density_of_states(data):
     const = data.constants
-    inputs = data.inputs
+    parameters = data.parameters
     VB = data.bias_voltage
     dos = data.effective_density_of_states
 
     # effective density of states in CB in [m^-3]
     dos.Nc = (
         2
-        * np.sqrt((2 * np.pi * inputs.M_eff * const.kB * inputs.T) ** 3)
+        * np.sqrt((2 * np.pi * parameters.M_eff * const.kB * parameters.T) ** 3)
         / (const.hbar * 2 * np.pi) ** 3
     )
     dos.Nv = dos.Nc
     # intrinsic carrier concentration per m^3 [units m^-3]
-    dos.ni = dos.Nc * math.exp(-inputs.Eg * const.eVJ / (2 * const.kB * inputs.T))
+    dos.ni = dos.Nc * math.exp(
+        -parameters.Eg * const.eVJ / (2 * const.kB * parameters.T)
+    )
     # carrier density for different bias voltages
-    dos.n = dos.ni * np.exp(VB.Vb * const.Qe / (2 * const.kB * inputs.T))
+    dos.n = dos.ni * np.exp(VB.Vb * const.Qe / (2 * const.kB * parameters.T))
     dos.p = dos.n
 
 
 def occupation_probability(data):
     const = data.constants
-    inputs = data.inputs
+    parameters = data.parameters
     dos = data.effective_density_of_states
     egrid = data.energy_grids
     tsr = data.trap_state_rc
@@ -39,19 +41,23 @@ def occupation_probability(data):
     ocp.p = ocp.n
 
     # matrix of e-capture coefficient for simple SRH
-    ocp.beta_n_s = np.broadcast_to(inputs.sign * inputs.v_th, (VB.NVb, egrid.ET.size))
+    ocp.beta_n_s = np.broadcast_to(
+        parameters.sign * parameters.v_th, (VB.NVb, egrid.ET.size)
+    )
     # matrix of h-capture coefficient for simple SRH
-    ocp.beta_p_s = np.broadcast_to(inputs.sigp * inputs.v_th, (VB.NVb, egrid.ET.size))
+    ocp.beta_p_s = np.broadcast_to(
+        parameters.sigp * parameters.v_th, (VB.NVb, egrid.ET.size)
+    )
 
     ocp.en_s = (
         ocp.beta_n_s
         * dos.Nc
-        * np.exp((egrid.ET - inputs.Ec) * const.eVJ / (const.kB * inputs.T))
+        * np.exp((egrid.ET - parameters.Ec) * const.eVJ / (const.kB * parameters.T))
     )  # electrom emission rate
     ocp.ep_s = (
         ocp.beta_p_s
         * dos.Nv
-        * np.exp((inputs.Ev - egrid.ET) * const.eVJ / (const.kB * inputs.T))
+        * np.exp((parameters.Ev - egrid.ET) * const.eVJ / (const.kB * parameters.T))
     )  # hole emissiom rate
 
     ocp.kn_s = ocp.n * ocp.beta_n_s  # electron capture rate
@@ -65,7 +71,7 @@ def occupation_probability(data):
         ocp.en_s * ocp.f_T_s
     )  # recombination efficiency
 
-    ocp.R_srh_s = inputs.Nt * ocp.eta_R_s  # rate of recombination
+    ocp.R_srh_s = parameters.Nt * ocp.eta_R_s  # rate of recombination
 
     # calculation of occupation probability, recombination efficiency and rate of recombination for radiative capture
 
@@ -77,12 +83,12 @@ def occupation_probability(data):
     ocp.en_r = (
         ocp.beta_n_r
         * dos.Nc
-        * np.exp((egrid.ET - inputs.Ec) * const.eVJ / (const.kB * inputs.T))
+        * np.exp((egrid.ET - parameters.Ec) * const.eVJ / (const.kB * parameters.T))
     )  # electrom emission rate
     ocp.ep_r = (
         ocp.beta_p_r
         * dos.Nv
-        * np.exp((inputs.Ev - egrid.ET) * const.eVJ / (const.kB * inputs.T))
+        * np.exp((parameters.Ev - egrid.ET) * const.eVJ / (const.kB * parameters.T))
     )  # hole emissiom rate
 
     ocp.kn_r = ocp.n * ocp.beta_n_r  # electron capture rate
@@ -96,7 +102,7 @@ def occupation_probability(data):
         ocp.en_r * ocp.f_T_r
     )  # recombination efficiency
 
-    ocp.R_srh_r = inputs.Nt * ocp.eta_R_r  # rate of recombination
+    ocp.R_srh_r = parameters.Nt * ocp.eta_R_r  # rate of recombination
 
     # calculation of occupation probability, recombination efficiency and rate of recombination for radiative capture
 
@@ -108,12 +114,12 @@ def occupation_probability(data):
     ocp.en_m = (
         ocp.beta_n_m
         * dos.Nc
-        * np.exp((egrid.ET - inputs.Ec) * const.Qe / (const.kB * inputs.T))
+        * np.exp((egrid.ET - parameters.Ec) * const.Qe / (const.kB * parameters.T))
     )  # electron emission rate
     ocp.ep_m = (
         ocp.beta_p_m
         * dos.Nv
-        * np.exp((inputs.Ev - egrid.ET) * const.Qe / (const.kB * inputs.T))
+        * np.exp((parameters.Ev - egrid.ET) * const.Qe / (const.kB * parameters.T))
     )  # electron emission rate
 
     ocp.kn_m = ocp.n * ocp.beta_n_m  # electron capture rate
@@ -133,7 +139,7 @@ def occupation_probability(data):
     )  # recombination efficiency
     eta_R_m_n = np.array_split(ocp.eta_R_m_n, 2, axis=1)
     ocp.eta_R_m = np.concatenate((eta_R_m_n[0], eta_R_m_p[1]), axis=1)
-    ocp.R_srh_m = inputs.Nt * ocp.eta_R_m  # rate of recombination
+    ocp.R_srh_m = parameters.Nt * ocp.eta_R_m  # rate of recombination
 
     ocp.f_T_m_1 = 1 - ocp.f_T_m
 
@@ -145,12 +151,12 @@ def occupation_probability(data):
     ocp.en = (
         ocp.beta_n
         * dos.Nc
-        * np.exp((egrid.ET - inputs.Ec) * const.Qe / (const.kB * inputs.T))
+        * np.exp((egrid.ET - parameters.Ec) * const.Qe / (const.kB * parameters.T))
     )  # electron emission rate
     ocp.ep = (
         ocp.beta_p
         * dos.Nv
-        * np.exp((inputs.Ev - egrid.ET) * const.Qe / (const.kB * inputs.T))
+        * np.exp((parameters.Ev - egrid.ET) * const.Qe / (const.kB * parameters.T))
     )  # electron emission rate
 
     ocp.kn = ocp.n * ocp.beta_n  # electron capture rate
@@ -164,7 +170,7 @@ def occupation_probability(data):
         ocp.en * ocp.f_T
     )  # recombination efficiency
 
-    ocp.R_srh = inputs.Nt * ocp.eta_R  # rate of recombination
+    ocp.R_srh = parameters.Nt * ocp.eta_R  # rate of recombination
 
 
 def test(data):
