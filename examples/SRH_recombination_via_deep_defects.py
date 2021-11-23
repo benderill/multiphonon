@@ -1,5 +1,7 @@
 from multipcc.initialize import Initialize
 from multipcc.capture import Multiphonon, Radiative
+from multipcc.taylor_simmons import TaylorSimmons
+from multipcc.utils import bias_voltage
 import sys
 
 sys.path.append("./")
@@ -31,9 +33,16 @@ def main(input_file, output_file):
     radiative.trap_state_rc()
 
     # calculation of defect occupation probability, recombination efficienecy and rate of SRH recombination
-    # taysim.effective_density_of_states(data)
-    # taysim.occupation_probability(data)
-    # taysim.eta_R_normalized(data)
+    start, stop, step = (
+        calc.data.inputs.V_start,
+        calc.data.inputs.V_stop,
+        calc.data.inputs.dV,
+    )
+    calc.data.bias_voltage = bias_voltage(start, stop, step)
+    taysim = TaylorSimmons(calc.data)
+    taysim.effective_density_of_states(calc.data)
+    taysim.occupation_probability(calc.data)
+    taysim.eta_R_normalized(calc.data)
     # taysim.test(data)
     calc.save()
 
@@ -41,14 +50,14 @@ def main(input_file, output_file):
     plot_data.plot_HRF(calc.data)
     plot_data.plot_radiative_capture_coefficients(calc.data)
     plot_data.plot_multiphonon_capture_coefficients(calc.data)
-    # plot_data.extrafactor(data)
-    # plot_data.twinx_rad(data)
-    # plot_data.twinx_mp(data)
-    # plot_data.twinx_combined(data)
-    # plot_data.twinx_constant(data)
-    # plot_data.plot_occupation_probability(data)
-    # plot_data.plot_recombination_efficiency(data)
-    # plot_data.plot_rate_SRH(data)
+    plot_data.extrafactor(calc.data)
+    plot_data.twinx_rad(calc.data)
+    plot_data.twinx_mp(calc.data)
+    plot_data.twinx_combined(calc.data)
+    plot_data.twinx_constant(calc.data)
+    plot_data.plot_occupation_probability(calc.data)
+    plot_data.plot_recombination_efficiency(calc.data)
+    plot_data.plot_rate_SRH(calc.data)
 
 
 if __name__ == "__main__":
